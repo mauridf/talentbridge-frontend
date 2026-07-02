@@ -7,24 +7,24 @@ export const CANDIDATO_ROUTES: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'registro',
-    loadComponent: () =>
-      import('./pages/registro/registro-candidato.component').then(
-        (m) => m.RegistroCandidatoComponent,
-      ),
-  },
-  {
-    path: 'confirmar-email',
-    loadComponent: () =>
-      import('./pages/confirmar-email/confirmar-email.component').then(
-        (m) => m.ConfirmarEmailComponent,
-      ),
-  },
-  {
     path: 'dashboard',
     loadComponent: () =>
       import('./pages/dashboard/dashboard-candidato.component').then(
         (m) => m.DashboardCandidatoComponent,
+      ),
+  },
+  {
+    path: 'editar',
+    loadComponent: () =>
+      import('./pages/perfil-pessoal/perfil-pessoal.component').then(
+        (m) => m.PerfilPessoalComponent,
+      ),
+  },
+  {
+    path: 'perfil-profissional',
+    loadComponent: () =>
+      import('./pages/perfil-profissional/perfil-profissional.component').then(
+        (m) => m.PerfilProfissionalComponent,
       ),
   },
   {

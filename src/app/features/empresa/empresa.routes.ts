@@ -40,4 +40,11 @@ export const EMPRESA_ROUTES: Routes = [
         (m) => m.ListaCandidaturasComponent,
       ),
   },
+  {
+    path: 'candidato/:id/:vaga',
+    loadComponent: () =>
+      import('./pages/perfil-candidato/perfil-candidato-detalhe.component').then(
+        (m) => m.PerfilCandidatoDetalheComponent,
+      ),
+  },
 ];

@@ -312,6 +312,12 @@ export class BigFiveService {
     },
   ];
 
+  private _ultimoResultado: BigFiveResponse | null = null;
+
+  get ultimoResultado(): BigFiveResponse | null {
+    return this._ultimoResultado;
+  }
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -323,6 +329,7 @@ export class BigFiveService {
         if (!response.sucesso || !response.valor) {
           throw new Error(response.erros?.[0]?.mensagem || 'Erro ao salvar teste');
         }
+        this._ultimoResultado = response.valor;
         return response.valor;
       }),
     );
