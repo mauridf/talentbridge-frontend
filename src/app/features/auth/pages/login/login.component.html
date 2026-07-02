@@ -1,0 +1,122 @@
+<div class="login-page">
+  <div class="login-container">
+    <!-- Lado esquerdo: Informações / Branding -->
+    <div class="login-branding">
+      <div class="login-branding-content">
+        <img src="assets/images/logo-white.svg" alt="TalentBridge" class="login-logo" />
+        <h1 class="login-branding-title">TalentBridge</h1>
+        <p class="login-branding-subtitle">Conectando talentos às melhores oportunidades</p>
+
+        <div class="login-features">
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Match inteligente entre candidatos e vagas</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Análise comportamental com Big Five</span>
+          </div>
+          <div class="feature-item">
+            <i class="pi pi-check-circle"></i>
+            <span>Gestão completa do processo seletivo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lado direito: Formulário -->
+    <div class="login-form-container">
+      <div class="login-form-wrapper">
+        <h2 class="login-form-title">Entrar</h2>
+        <p class="login-form-subtitle">Acesse sua conta para continuar</p>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+          <!-- Email -->
+          <div class="form-field">
+            <label for="email" class="form-label">Email</label>
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              placeholder="seu@email.com"
+              class="w-full"
+              [class.ng-invalid]="
+                loginForm.get('email')?.invalid && loginForm.get('email')?.touched
+              "
+            />
+            <small
+              *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+              class="form-error"
+            >
+              <span *ngIf="loginForm.get('email')?.errors?.['required']">Email é obrigatório.</span>
+              <span *ngIf="loginForm.get('email')?.errors?.['email']">Email inválido.</span>
+            </small>
+          </div>
+
+          <!-- Senha -->
+          <div class="form-field">
+            <label for="senha" class="form-label">Senha</label>
+            <p-password
+              id="senha"
+              formControlName="senha"
+              [toggleMask]="true"
+              [feedback]="false"
+              placeholder="Sua senha"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+            >
+            </p-password>
+            <small
+              *ngIf="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched"
+              class="form-error"
+            >
+              <span *ngIf="loginForm.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
+              <span *ngIf="loginForm.get('senha')?.errors?.['minlength']"
+                >Mínimo 6 caracteres.</span
+              >
+            </small>
+          </div>
+
+          <!-- Lembrar email + Esqueci senha -->
+          <div class="form-options">
+            <p-checkbox formControlName="lembrar" label="Lembrar email" [binary]="true">
+            </p-checkbox>
+
+            <a routerLink="/forgot-password" class="forgot-password"> Esqueceu a senha? </a>
+          </div>
+
+          <!-- Botão Login -->
+          <p-button
+            type="submit"
+            label="Entrar"
+            icon="pi pi-sign-in"
+            [loading]="carregando"
+            styleClass="w-full login-button"
+          >
+          </p-button>
+
+          <!-- Links de cadastro -->
+          <div class="login-register-links">
+            <p>Ainda não tem conta?</p>
+            <div class="register-buttons">
+              <a routerLink="/candidatos/registro" class="register-link">
+                <i class="pi pi-user-plus"></i>
+                Cadastrar como Candidato
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Seleção de Perfil (multi-perfil) -->
+  <app-perfil-selector-modal
+    [visivel]="mostrarModalPerfil"
+    [perfis]="perfisDisponiveis"
+    [carregando]="carregando"
+    (confirmar)="onConfirmarPerfil($event)"
+  >
+  </app-perfil-selector-modal>
+</div>
