@@ -1,0 +1,35 @@
+.vaga-list-page {
+  max-width: 1200px;
+}
+
+.vaga-titulo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.vaga-nome {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.vaga-cidade {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+}
+
+.vaga-candidaturas {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.text-danger {
+  color: var(--danger-color);
+  font-weight: 600;
+}
+
+.vaga-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: nowrap;
+}

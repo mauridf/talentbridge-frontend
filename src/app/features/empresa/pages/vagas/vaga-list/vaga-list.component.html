@@ -1,0 +1,130 @@
+<div class="vaga-list-page page-container fade-in">
+  <app-page-header
+    titulo="Minhas Vagas"
+    subtitulo="Gerencie todas as vagas da sua empresa"
+    textoBotao="Nova Vaga"
+    iconeBotao="pi pi-plus"
+    routerLink="/empresa/criar-vagas"
+  >
+  </app-page-header>
+
+  <!-- Loading -->
+  <app-loading-skeleton *ngIf="carregando" type="table" [quantidade]="5"></app-loading-skeleton>
+
+  <!-- Erro -->
+  <app-error-state
+    *ngIf="erro && !carregando"
+    [mensagem]="mensagemErro"
+    (tentarNovamente)="carregarVagas()"
+  >
+  </app-error-state>
+
+  <!-- Lista Vazia -->
+  <app-empty-state
+    *ngIf="!carregando && !erro && vagas.length === 0"
+    icone="pi pi-briefcase"
+    titulo="Nenhuma vaga cadastrada"
+    descricao="Crie sua primeira vaga para começar a receber candidaturas."
+    textoAcao="Criar Vaga"
+    iconeAcao="pi pi-plus"
+    routerLink="/empresa/criar-vagas"
+  >
+  </app-empty-state>
+
+  <!-- Tabela de Vagas -->
+  <div *ngIf="!carregando && !erro && vagas.length > 0" class="card">
+    <p-table
+      [value]="vagas"
+      [lazy]="true"
+      [paginator]="true"
+      [rows]="pageSize"
+      [totalRecords]="totalRegistros"
+      [rowsPerPageOptions]="[5, 10, 20]"
+      (onPage)="onPageChange($event)"
+      [showCurrentPageReport]="true"
+      currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} vagas"
+      styleClass="p-datatable-sm"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Título</th>
+          <th>Candidaturas</th>
+          <th>Status</th>
+          <th>Vencimento</th>
+          <th>Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-vaga>
+        <tr>
+          <td>
+            <div class="vaga-titulo">
+              <span class="vaga-nome">{{ vaga.titulo }}</span>
+              <span class="vaga-cidade">{{ vaga.cidade }}/{{ vaga.estado }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="vaga-candidaturas">{{ vaga.totalCandidaturas || 0 }}</span>
+          </td>
+          <td>
+            <p-tag
+              [value]="getStatusTexto(vaga.status)"
+              [severity]="getStatusSeverity(vaga.status)"
+            >
+            </p-tag>
+          </td>
+          <td>
+            <span [class.text-danger]="isVencimentoProximo(vaga.dataCandidaturaFim)">
+              {{ vaga.dataCandidaturaFim || '' | dataBr }}
+            </span>
+          </td>
+          <td>
+            <div class="vaga-actions">
+              <p-button
+                icon="pi pi-eye"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                pTooltip="Ver detalhes"
+                [routerLink]="['/empresa/oportunidades-detalhes', vaga.id]"
+              >
+              </p-button>
+
+              <p-button
+                icon="pi pi-pencil"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                pTooltip="Editar"
+                [routerLink]="['/empresa/editar-vagas', vaga.id]"
+              >
+              </p-button>
+
+              <p-button
+                *ngIf="vaga.status === 'aberta'"
+                icon="pi pi-ban"
+                styleClass="p-button-rounded p-button-text p-button-sm p-button-danger"
+                pTooltip="Encerrar"
+                (onClick)="confirmarEncerrar(vaga)"
+              >
+              </p-button>
+
+              <p-button
+                *ngIf="vaga.status === 'encerrada'"
+                icon="pi pi-refresh"
+                styleClass="p-button-rounded p-button-text p-button-sm p-button-success"
+                pTooltip="Reativar"
+                (onClick)="confirmarReativar(vaga)"
+              >
+              </p-button>
+
+              <p-button
+                icon="pi pi-users"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                pTooltip="Ver candidaturas"
+                [routerLink]="['/empresa/candidaturas', vaga.id]"
+              >
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

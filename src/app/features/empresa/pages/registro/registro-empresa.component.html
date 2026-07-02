@@ -1,0 +1,196 @@
+<div class="registro-page">
+  <div class="registro-container">
+    <p-card styleClass="registro-card">
+      <div class="registro-header">
+        <h1>Cadastrar Empresa</h1>
+        <p>Preencha os dados para criar sua conta empresarial</p>
+      </div>
+
+      <p-divider></p-divider>
+
+      <!-- Validando Convite -->
+      <div *ngIf="validandoConvite" class="registro-status">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: var(--primary-color)"></i>
+        <p>Validando convite...</p>
+      </div>
+
+      <!-- Convite Inválido -->
+      <div *ngIf="conviteInvalido && !validandoConvite" class="registro-status error">
+        <i class="pi pi-exclamation-triangle"></i>
+        <h2>Convite Inválido</h2>
+        <p>O link de convite é inválido ou expirou. Solicite um novo convite ao administrador.</p>
+        <p-button label="Voltar ao Login" icon="pi pi-arrow-left" routerLink="/login"> </p-button>
+      </div>
+
+      <!-- Sucesso -->
+      <div *ngIf="cadastroRealizado" class="registro-status success">
+        <i class="pi pi-check-circle"></i>
+        <h2>Cadastro Realizado!</h2>
+        <p>{{ mensagemSucesso }}</p>
+        <p-button label="Ir para o Login" icon="pi pi-sign-in" routerLink="/login"> </p-button>
+      </div>
+
+      <!-- Formulário -->
+      <form
+        *ngIf="!validandoConvite && !conviteInvalido && !cadastroRealizado"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="registro-form"
+      >
+        <!-- Dados do Gestor -->
+        <div class="form-section">
+          <h3><i class="pi pi-user"></i> Dados do Gestor</h3>
+
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label for="nomeGestor">Nome Completo *</label>
+              <input
+                id="nomeGestor"
+                type="text"
+                pInputText
+                formControlName="nomeGestor"
+                placeholder="Nome do gestor responsável"
+              />
+              <small
+                *ngIf="form.get('nomeGestor')?.invalid && form.get('nomeGestor')?.touched"
+                class="form-error"
+              >
+                Nome completo é obrigatório.
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="emailGestor">Email *</label>
+              <input
+                id="emailGestor"
+                type="email"
+                pInputText
+                formControlName="emailGestor"
+                placeholder="email@empresa.com"
+              />
+              <small
+                *ngIf="form.get('emailGestor')?.invalid && form.get('emailGestor')?.touched"
+                class="form-error"
+              >
+                Email válido é obrigatório.
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="telefoneEmpresa">Telefone *</label>
+              <p-inputMask
+                id="telefoneEmpresa"
+                formControlName="telefoneEmpresa"
+                mask="(99) 9999-9999"
+                placeholder="(11) 3333-3333"
+              ></p-inputMask>
+              <small
+                *ngIf="form.get('telefoneEmpresa')?.invalid && form.get('telefoneEmpresa')?.touched"
+                class="form-error"
+              >
+                Telefone é obrigatório.
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="senha">Senha *</label>
+              <p-password
+                id="senha"
+                formControlName="senha"
+                [toggleMask]="true"
+                placeholder="Mínimo 6 caracteres"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+              ></p-password>
+            </div>
+
+            <div class="form-field">
+              <label for="confirmacaoSenha">Confirmar Senha *</label>
+              <p-password
+                id="confirmacaoSenha"
+                formControlName="confirmacaoSenha"
+                [toggleMask]="true"
+                [feedback]="false"
+                placeholder="Repita a senha"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+              ></p-password>
+              <small
+                *ngIf="form.hasError('mismatch') && form.get('confirmacaoSenha')?.touched"
+                class="form-error"
+              >
+                As senhas não conferem.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dados da Empresa -->
+        <div class="form-section">
+          <h3><i class="pi pi-building"></i> Dados da Empresa</h3>
+
+          <div class="form-grid">
+            <div class="form-field full-width">
+              <label for="nomeEmpresa">Nome da Empresa *</label>
+              <input
+                id="nomeEmpresa"
+                type="text"
+                pInputText
+                formControlName="nomeEmpresa"
+                placeholder="Razão social ou nome fantasia"
+              />
+            </div>
+
+            <div class="form-field">
+              <label for="cnpj">CNPJ *</label>
+              <p-inputMask
+                id="cnpj"
+                formControlName="cnpj"
+                mask="99.999.999/9999-99"
+                placeholder="00.000.000/0000-00"
+              ></p-inputMask>
+              <small
+                *ngIf="form.get('cnpj')?.invalid && form.get('cnpj')?.touched"
+                class="form-error"
+              >
+                CNPJ é obrigatório.
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="segmentoId">Segmento *</label>
+              <input
+                id="segmentoId"
+                type="text"
+                pInputText
+                formControlName="segmentoId"
+                placeholder="ID do segmento"
+              />
+              <small class="form-hint">Informe o código do segmento fornecido no convite.</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="form-actions">
+          <p-button
+            type="submit"
+            label="Cadastrar Empresa"
+            icon="pi pi-building"
+            [loading]="carregando"
+            styleClass="w-full"
+          >
+          </p-button>
+        </div>
+
+        <div class="form-footer">
+          <p>Já tem uma conta?</p>
+          <a routerLink="/login">
+            <i class="pi pi-sign-in"></i>
+            Fazer Login
+          </a>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>
