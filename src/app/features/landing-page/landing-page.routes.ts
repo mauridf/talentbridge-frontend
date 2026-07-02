@@ -8,4 +8,11 @@ export const LANDING_PAGE_ROUTES: Routes = [
         (m) => m.ListaVagasPublicComponent,
       ),
   },
+  {
+    path: 'vaga/:id',
+    loadComponent: () =>
+      import('./pages/vaga-detalhe/detalhe-vaga-public.component').then(
+        (m) => m.DetalheVagaPublicComponent,
+      ),
+  },
 ];

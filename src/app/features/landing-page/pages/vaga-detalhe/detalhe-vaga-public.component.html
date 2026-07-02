@@ -1,0 +1,136 @@
+<div class="vaga-detalhe-page">
+  <!-- Header -->
+  <header class="vaga-detalhe-header">
+    <div class="vaga-detalhe-header-content">
+      <a [routerLink]="['/empresa', slug]" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        Voltar para vagas
+      </a>
+    </div>
+  </header>
+
+  <!-- Corpo -->
+  <div class="vaga-detalhe-body">
+    <app-loading-spinner *ngIf="carregando" mensagem="Carregando vaga..."></app-loading-spinner>
+
+    <app-error-state *ngIf="erro && !carregando" [mensagem]="mensagemErro"> </app-error-state>
+
+    <ng-container *ngIf="vaga && !carregando">
+      <!-- Cabeçalho da Vaga -->
+      <div class="vaga-hero card">
+        <div class="vaga-hero-left">
+          <p-tag value="Vaga" severity="info" styleClass="mb-2"></p-tag>
+          <h1>{{ vaga.titulo }}</h1>
+          <p class="vaga-empresa">{{ vaga.empresaNome }}</p>
+
+          <div class="vaga-hero-info">
+            <span><i class="pi pi-map-marker"></i> {{ vaga.cidade }}/{{ vaga.estado }}</span>
+            <span *ngIf="vaga.salario"
+              ><i class="pi pi-dollar"></i> {{ vaga.salario | currency: 'BRL' }}</span
+            >
+            <span><i class="pi pi-briefcase"></i> {{ vaga.regimeTrabalho }}</span>
+            <span><i class="pi pi-clock"></i> {{ vaga.jornadaTrabalho }}</span>
+          </div>
+
+          <div class="vaga-hero-meta">
+            <span class="meta-item">
+              <i class="pi pi-users"></i>
+              {{ vaga.quantidadeVagas }} vaga(s)
+            </span>
+            <span class="meta-item">
+              <i class="pi pi-calendar"></i>
+              Publicada em {{ vaga.dataPublicacao || '' | dataBr }}
+            </span>
+            <span class="meta-item" *ngIf="vaga.dataCandidaturaFim">
+              <i class="pi pi-hourglass"></i>
+              Candidaturas até {{ vaga.dataCandidaturaFim || '' | dataBr }}
+            </span>
+          </div>
+        </div>
+
+        <div class="vaga-hero-right">
+          <p-button
+            label="Candidatar-se"
+            icon="pi pi-send"
+            styleClass="p-button-lg w-full"
+            (onClick)="candidatar()"
+          >
+          </p-button>
+        </div>
+      </div>
+
+      <!-- Grid de Detalhes -->
+      <div class="vaga-detalhe-grid">
+        <!-- Coluna Principal -->
+        <div class="vaga-main">
+          <!-- Descrição -->
+          <div class="card vaga-section">
+            <h2><i class="pi pi-file"></i> Descrição da Vaga</h2>
+            <p class="vaga-descricao">{{ vaga.descricao }}</p>
+          </div>
+
+          <!-- Atividades -->
+          <div class="card vaga-section" *ngIf="atividadesList.length > 0">
+            <h2><i class="pi pi-list-check"></i> Atividades</h2>
+            <ul class="vaga-list">
+              <li *ngFor="let atividade of atividadesList">{{ atividade.trim() }}</li>
+            </ul>
+          </div>
+
+          <!-- Benefícios -->
+          <div class="card vaga-section" *ngIf="beneficiosList.length > 0">
+            <h2><i class="pi pi-gift"></i> Benefícios</h2>
+            <ul class="vaga-list">
+              <li *ngFor="let beneficio of beneficiosList">{{ beneficio.trim() }}</li>
+            </ul>
+          </div>
+
+          <!-- Diferenciais -->
+          <div class="card vaga-section" *ngIf="vaga.diferenciaisConsiderados">
+            <h2><i class="pi pi-star"></i> Diferenciais</h2>
+            <p>{{ vaga.diferenciaisConsiderados }}</p>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="vaga-sidebar">
+          <!-- Requisitos -->
+          <div class="card vaga-section">
+            <h2><i class="pi pi-check-square"></i> Requisitos</h2>
+
+            <div class="requisito-item">
+              <strong>Formação:</strong>
+              <span>{{ vaga.formacaoAcademica || 'Não especificado' }}</span>
+            </div>
+
+            <div class="requisito-item">
+              <strong>Área de Atuação:</strong>
+              <span>{{ vaga.areaAtuacao || 'Não especificado' }}</span>
+            </div>
+
+            <div class="requisito-item">
+              <strong>Experiência:</strong>
+              <span>{{ vaga.tempoExperiencia || 'Não especificado' }}</span>
+            </div>
+
+            <div class="requisito-item">
+              <strong>Tipo de Contratação:</strong>
+              <span>{{ vaga.tipoContratacao }}</span>
+            </div>
+          </div>
+
+          <!-- Competências -->
+          <div class="card vaga-section" *ngIf="vaga.competencias?.length">
+            <h2><i class="pi pi-code"></i> Competências</h2>
+            <div class="competencias-list">
+              <span class="competencia-tag" *ngFor="let comp of vaga.competencias">
+                {{ comp.nome }}
+                <small>(Nível {{ comp.nivel }})</small>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

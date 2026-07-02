@@ -1,0 +1,124 @@
+<div class="landing-page">
+  <!-- Header da Empresa -->
+  <header class="landing-header">
+    <div class="landing-header-content">
+      <div class="empresa-info">
+        <div class="empresa-logo" *ngIf="empresa?.logo">
+          <img [src]="empresa?.logo" [alt]="empresa?.nome" />
+        </div>
+        <div class="empresa-logo-placeholder" *ngIf="!empresa?.logo">
+          <i class="pi pi-building"></i>
+        </div>
+        <div class="empresa-details">
+          <h1>{{ empresa?.nome || 'Carregando...' }}</h1>
+          <p class="empresa-meta">
+            <span
+              ><i class="pi pi-map-marker"></i> {{ empresa?.cidade }}/{{ empresa?.estado }}</span
+            >
+            <span *ngIf="empresa?.segmento"><i class="pi pi-tag"></i> {{ empresa?.segmento }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="empresa-stats" *ngIf="empresa">
+        <div class="stat-badge">
+          <span class="stat-number">{{ empresa.totalVagas }}</span>
+          <span class="stat-label">Vagas Abertas</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Corpo -->
+  <div class="landing-body">
+    <!-- Loading -->
+    <app-loading-skeleton *ngIf="carregando" type="list" [quantidade]="5"></app-loading-skeleton>
+
+    <!-- Erro -->
+    <app-error-state
+      *ngIf="erro && !carregando"
+      [mensagem]="mensagemErro"
+      (tentarNovamente)="carregarPagina()"
+    >
+    </app-error-state>
+
+    <!-- Conteúdo -->
+    <ng-container *ngIf="!carregando && !erro">
+      <!-- Barra de Busca -->
+      <div class="search-bar" *ngIf="vagas.length > 0">
+        <div class="search-input-wrapper">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="termoBusca"
+            (input)="filtrarVagas()"
+            placeholder="Buscar por título, cargo ou cidade..."
+            class="search-input"
+          />
+        </div>
+        <span class="search-results" *ngIf="termoBusca">
+          {{ vagasFiltradas.length }} vaga(s) encontrada(s)
+        </span>
+      </div>
+
+      <!-- Lista Vazia -->
+      <app-empty-state
+        *ngIf="vagas.length === 0"
+        icone="pi pi-briefcase"
+        titulo="Nenhuma vaga disponível"
+        descricao="Esta empresa não possui vagas abertas no momento. Volte mais tarde!"
+      >
+      </app-empty-state>
+
+      <!-- Sem resultados da busca -->
+      <app-empty-state
+        *ngIf="vagas.length > 0 && vagasFiltradas.length === 0"
+        icone="pi pi-search"
+        titulo="Nenhum resultado"
+        descricao="Nenhuma vaga encontrada com o termo '{{ termoBusca }}'."
+      >
+      </app-empty-state>
+
+      <!-- Lista de Vagas -->
+      <div class="vagas-grid" *ngIf="vagasFiltradas.length > 0">
+        <div class="vaga-card" *ngFor="let vaga of vagasFiltradas">
+          <div class="vaga-card-header">
+            <h3>{{ vaga.titulo }}</h3>
+            <p-tag [value]="getRegimeTexto(vaga.regimeTrabalho)" severity="info"></p-tag>
+          </div>
+
+          <div class="vaga-card-body">
+            <p class="vaga-cargo">{{ vaga.cargo }}</p>
+
+            <div class="vaga-info">
+              <span><i class="pi pi-map-marker"></i> {{ vaga.cidade }}/{{ vaga.estado }}</span>
+              <span *ngIf="vaga.salario"
+                ><i class="pi pi-dollar"></i> {{ vaga.salario | currency: 'BRL' }}</span
+              >
+              <span><i class="pi pi-calendar"></i> {{ vaga.dataPublicacao || '' | dataBr }}</span>
+            </div>
+          </div>
+
+          <div class="vaga-card-footer">
+            <p-button
+              label="Ver Detalhes"
+              icon="pi pi-arrow-right"
+              iconPos="right"
+              styleClass="p-button-outlined p-button-sm"
+              [routerLink]="['/empresa', slug, 'vaga', vaga.id]"
+            >
+            </p-button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="landing-footer-content">
+      <p>© {{ anoAtual }} {{ empresa?.nome || 'TalentBridge' }}. Todos os direitos reservados.</p>
+      <p class="powered-by">Powered by <strong>TalentBridge</strong></p>
+    </div>
+  </footer>
+</div>

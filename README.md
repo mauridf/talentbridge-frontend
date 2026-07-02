@@ -1,27 +1,144 @@
-# TalentbridgeFrontend
+# TalentBridge Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+Frontend da plataforma **TalentBridge (GoBee Jobs)** - conectando talentos às melhores oportunidades.
 
-## Development server
+## 🚀 Stack Tecnológica
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+| Tecnologia | Versão | Uso |
+|------------|--------|-----|
+| **Angular** | 18+ (standalone) | Framework SPA |
+| **PrimeNG** | 17+ | Componentes UI |
+| **PrimeFlex** | 3+ | Layout CSS |
+| **PrimeIcons** | 7+ | Ícones |
+| **RxJS** | 7+ | Programação reativa |
+| **Chart.js** | 4+ | Gráficos |
+| **date-fns** | 3+ | Manipulação de datas |
 
-## Code scaffolding
+## 📋 Pré-requisitos
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Node.js** 18.x ou 20.x
+- **npm** 9+ ou **yarn** 1.22+
+- **Angular CLI** 18+
+- **Git**
 
-## Build
+## 🔧 Instalação
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+# Clonar o repositório
+git clone https://github.com/seu-usuario/talentbridge-frontend.git
+cd talentbridge-frontend
 
-## Running unit tests
+# Instalar dependências
+npm install --legacy-peer-deps
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+# Iniciar servidor de desenvolvimento
+ng serve
+Acesse http://localhost:4200/ no navegador.
 
-## Running end-to-end tests
+🏗️ Estrutura do Projeto
+text
+src/
+├── app/
+│   ├── core/                    # Serviços singleton, guards, interceptors
+│   │   ├── guards/              # AuthGuard, CandidatoGuard, EmpresaGuard, AdminGuard
+│   │   ├── interceptors/        # Auth, Error, Loading
+│   │   ├── services/            # Token, Notification, Loading, Dominio
+│   │   └── models/              # DTOs e interfaces
+│   ├── shared/                  # Componentes, pipes, directives reutilizáveis
+│   │   ├── components/          # LoadingSpinner, Skeleton, EmptyState, etc.
+│   │   ├── pipes/               # CPF/CNPJ, Telefone, Data
+│   │   └── directives/          # Permissao
+│   └── features/                # Módulos lazy-loading
+│       ├── auth/                # Login, Forgot/Reset Password
+│       ├── candidato/           # Dashboard, Perfil, Big Five, Candidaturas
+│       ├── empresa/             # Dashboard, Vagas, Candidaturas, Créditos
+│       ├── admin/               # Dashboard, Monitor, Convites, Parâmetros
+│       └── landing-page/        # Páginas públicas de vagas
+├── assets/                      # Imagens, ícones, fonts
+├── environments/                # Configurações por ambiente
+└── styles/                      # SCSS global e temas
+🔑 Autenticação
+O sistema suporta 4 perfis de acesso:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Candidato: Busca vagas, candidatura, teste comportamental
 
-## Further help
+Recrutador: Gestão de vagas e candidaturas
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Gestor de Empresa: Dashboard, vagas, relatórios, créditos
+
+Administrador: Acesso total ao sistema
+
+Fluxo de Login
+Login com email/senha
+
+Suporte a multi-perfil (seleção após login)
+
+Suporte a multi-empresa (seleção após login)
+
+Refresh token automático via cookie httpOnly
+
+🛠️ Comandos Disponíveis
+bash
+# Desenvolvimento
+ng serve                    # Servidor de desenvolvimento (porta 4200)
+ng serve --open             # Abre navegador automaticamente
+
+# Build
+ng build                    # Build de desenvolvimento
+ng build --configuration=production  # Build de produção
+
+# Testes
+ng test                     # Testes unitários (Jasmine/Karma)
+ng e2e                      # Testes end-to-end (Cypress)
+
+# Lint
+ng lint                     # Verificação de código (ESLint)
+ng lint --fix               # Correção automática
+
+# Geração de componentes
+ng generate component features/nome-do-componente --standalone
+📦 Deploy no Render
+Configuração
+O projeto está configurado para deploy no Render.
+
+Crie uma conta no Render
+
+Conecte seu repositório GitHub
+
+Crie um novo Static Site ou Web Service
+
+Configure:
+
+Build Command:
+
+bash
+npm install --legacy-peer-deps && npm run build --configuration=production
+Publish Directory:
+
+text
+dist/talentbridge-frontend/browser
+Adicione as variáveis de ambiente:
+
+API_URL: URL do backend em produção
+
+Redirect para SPA
+Adicione uma regra de rewrite no Render para suportar rotas do Angular:
+
+text
+Source: /*
+Destination: /index.html
+Action: Rewrite
+🎨 Temas e Customização
+O tema é configurado através de variáveis CSS em src/styles/styles.scss:
+
+scss
+:root {
+  --primary-color: #3B82F6;
+  --secondary-color: #10B981;
+  --success-color: #22C55E;
+  --warning-color: #F59E0B;
+  --danger-color: #EF4444;
+  // ...
+}
+📄 Licença
+Este projeto é proprietário. Todos os direitos reservados.
