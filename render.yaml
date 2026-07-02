@@ -1,7 +1,7 @@
 services:
   - type: web
     name: talentbridge-frontend
-    env: static
+    runtime: static
     buildCommand: npm install --legacy-peer-deps && npm run build --configuration=production
     staticPublishPath: dist/talentbridge-frontend/browser
     routes:
