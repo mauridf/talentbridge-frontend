@@ -14,32 +14,45 @@ export const routes: Routes = [
     loadChildren: () => import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
 
-  // Rotas do Candidato (protegidas)
-  //   {
-  //     path: 'candidatos',
-  //     canActivate: [authGuard, candidatoGuard],
-  //     loadChildren: () => import('./features/candidato/candidato.routes').then(m => m.CANDIDATO_ROUTES)
-  //   },
+  // Rotas públicas do candidato (sem layout, sem autenticação)
+  {
+    path: 'candidatos/registro',
+    loadComponent: () => import('./features/candidato/pages/registro/registro-candidato.component').then(m => m.RegistroCandidatoComponent),
+  },
+  {
+    path: 'candidatos/confirmar-email',
+    loadComponent: () => import('./features/candidato/pages/confirmar-email/confirmar-email.component').then(m => m.ConfirmarEmailComponent),
+  },
 
-  // Rotas da Empresa (protegidas)
-  //   {
-  //     path: 'empresa',
-  //     canActivate: [authGuard, empresaGuard],
-  //     loadChildren: () => import('./features/empresa/empresa.routes').then(m => m.EMPRESA_ROUTES)
-  //   },
+  // Rotas protegidas (com layout)
+  {
+    path: 'candidatos',
+    loadComponent: () => import('./shared/components/layout/layout.component').then(m => m.LayoutComponent),
+    canActivate: [authGuard, candidatoGuard],
+    loadChildren: () => import('./features/candidato/candidato.routes').then(m => m.CANDIDATO_ROUTES),
+  },
+  {
+    path: 'empresa',
+    loadComponent: () => import('./shared/components/layout/layout.component').then(m => m.LayoutComponent),
+    canActivate: [authGuard, empresaGuard],
+    loadChildren: () => import('./features/empresa/empresa.routes').then(m => m.EMPRESA_ROUTES),
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./shared/components/layout/layout.component').then(m => m.LayoutComponent),
+    canActivate: [authGuard, adminGuard],
+    loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+  },
 
-  // Rotas do Admin (protegidas)
-  //   {
-  //     path: 'admin',
-  //     canActivate: [authGuard, adminGuard],
-  //     loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES)
-  //   },
-
-  // Landing Pages (públicas)
-  //   {
-  //     path: 'empresa/:slug',
-  //     loadChildren: () => import('./features/landing-page/landing-page.routes').then(m => m.LANDING_PAGE_ROUTES)
-  //   },
+  // Landing Pages (públicas, sem layout) — prefixo /c/ para evitar conflito com rotas protegidas
+  {
+    path: 'c/:slug',
+    loadComponent: () => import('./features/landing-page/pages/empresa-vagas/lista-vagas-public.component').then(m => m.ListaVagasPublicComponent),
+  },
+  {
+    path: 'c/:slug/vaga/:id',
+    loadComponent: () => import('./features/landing-page/pages/vaga-detalhe/detalhe-vaga-public.component').then(m => m.DetalheVagaPublicComponent),
+  },
 
   // Acesso negado
   {

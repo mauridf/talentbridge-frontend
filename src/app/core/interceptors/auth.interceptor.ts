@@ -1,15 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   HttpInterceptor,
   HttpRequest,
   HttpHandler,
   HttpEvent,
   HttpErrorResponse,
+  HttpClient,
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
 import { TokenService } from '../services/token.service';
 import { Router } from '@angular/router';
+import { environment } from '@environments/environment';
 
 /**
  * Interceptor de Autenticação
@@ -26,6 +28,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   // Subject para aguardar refresh completar
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
+  private http = inject(HttpClient);
 
   constructor(
     private tokenService: TokenService,
@@ -71,15 +75,15 @@ export class AuthInterceptor implements HttpInterceptor {
    *
    * Fluxo:
    * 1. Se já está fazendo refresh, espera o refresh atual terminar
-   * 2. Se não está, inicia o refresh
+   * 2. Se não está, inicia o refresh chamando /Usuario/RefreshAcesso
    * 3. Se refresh falhar, redireciona para login
    */
   private tratar401(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Se já está fazendo refresh, aguarda o resultado
     if (this.isRefreshing) {
       return this.refreshTokenSubject.pipe(
-        filter((token) => token !== null), // Espera até ter um token
-        take(1), // Pega apenas o primeiro valor
+        filter((token) => token !== null),
+        take(1),
         switchMap((token) => {
           return next.handle(this.adicionarToken(request, token));
         }),
@@ -90,27 +94,34 @@ export class AuthInterceptor implements HttpInterceptor {
     this.isRefreshing = true;
     this.refreshTokenSubject.next(null);
 
-    // Tenta fazer refresh (chamada HTTP para /Usuario/RefreshAcesso)
-    // Como o refresh usa cookie httpOnly, não precisamos enviar nada no body
-    return next.handle(request).pipe(
-      switchMap((event: any) => {
-        // Se a resposta do refresh veio com novo token
-        // O backend coloca o novo token no header ou no body
-        // Depende da implementação do backend
-        this.isRefreshing = false;
-        this.refreshTokenSubject.next(this.tokenService.obterToken());
-        return next.handle(request);
-      }),
-      catchError((error) => {
-        this.isRefreshing = false;
-        this.refreshTokenSubject.error(error);
+    // Chama o endpoint de refresh (usa cookie httpOnly, sem body)
+    return this.http
+      .get<any>(`${environment.apiUrl}/Usuario/RefreshAcesso`, { withCredentials: true })
+      .pipe(
+        switchMap((response) => {
+          this.isRefreshing = false;
 
-        // Refresh falhou -> logout
-        this.tokenService.removerToken();
-        this.router.navigate(['/login']);
+          const accessToken =
+            response?.valor?.accessToken || response?.accessToken;
 
-        return throwError(() => error);
-      }),
-    );
+          if (accessToken) {
+            this.tokenService.salvarToken(accessToken);
+            this.refreshTokenSubject.next(accessToken);
+            return next.handle(this.adicionarToken(request, accessToken));
+          }
+
+          this.refreshTokenSubject.next(null);
+          return throwError(() => new Error('Token não recebido no refresh'));
+        }),
+        catchError((error) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.error(error);
+
+          this.tokenService.removerToken();
+          this.router.navigate(['/login']);
+
+          return throwError(() => error);
+        }),
+      );
   }
 }

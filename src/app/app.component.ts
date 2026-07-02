@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -6,6 +6,10 @@ import { LoadingSpinnerComponent } from '../app/shared/components/loading-spinne
 import { LoadingService } from '../app/core/services/loading.service';
 import { NotificationService } from '../app/core/services/notification.service';
 import { PrimeNGConfig } from 'primeng/api';
+import { TokenService } from '../app/core/services/token.service';
+import { AuthService } from '../app/core/services/auth.service';
+import { environment } from '../environments/environment';
+import { interval, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -32,16 +36,23 @@ import { PrimeNGConfig } from 'primeng/api';
     <router-outlet></router-outlet>
   `,
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
+  private refreshSubscription?: Subscription;
+
   constructor(
     public loadingService: LoadingService,
     private notificationService: NotificationService,
     private primengConfig: PrimeNGConfig,
+    private tokenService: TokenService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
     // Configura PrimeNG
     this.primengConfig.ripple = true;
+
+    // Inicia verificação periódica de refresh do token
+    this.iniciarRefreshAutomatico();
 
     // Configura traduções PrimeNG
     this.primengConfig.setTranslation({
@@ -84,6 +95,24 @@ export class AppComponent implements OnInit {
       today: 'Hoje',
       clear: 'Limpar',
       // Mais traduções podem ser adicionadas conforme necessário
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSubscription?.unsubscribe();
+  }
+
+  private iniciarRefreshAutomatico(): void {
+    const intervaloMinutos = Math.max(environment.jwtRefreshInterval || 30, 5);
+    const intervaloMs = intervaloMinutos * 60 * 1000;
+
+    this.refreshSubscription = interval(intervaloMs).subscribe(() => {
+      if (this.tokenService.temToken()) {
+        const minutosAntes = environment.jwtRefreshInterval;
+        if (this.tokenService.isTokenProximoExpirar(minutosAntes)) {
+          this.authService.refreshToken().subscribe();
+        }
+      }
     });
   }
 }

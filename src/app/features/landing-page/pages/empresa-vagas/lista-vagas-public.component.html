@@ -3,28 +3,32 @@
   <header class="landing-header">
     <div class="landing-header-content">
       <div class="empresa-info">
-        <div class="empresa-logo" *ngIf="empresa?.logo">
-          <img [src]="empresa.logo" [alt]="'Logo ' + empresa.nome" title="Logo da empresa" />
-        </div>
-        <div class="empresa-logo-placeholder" *ngIf="!empresa?.logo">
-          <i class="pi pi-building"></i>
-        </div>
-        <div class="empresa-details">
-          <h1>{{ empresa?.nome || 'Carregando...' }}</h1>
-          <p class="empresa-meta">
-            <span
-              ><i class="pi pi-map-marker"></i> {{ empresa?.cidade }}/{{ empresa?.estado }}</span
-            >
-            <span *ngIf="empresa?.segmento"><i class="pi pi-tag"></i> {{ empresa.segmento }}</span>
-          </p>
-        </div>
+        @if (empresa) {
+          <div class="empresa-logo" *ngIf="empresa.logo">
+            <img [src]="empresa.logo" [alt]="'Logo ' + empresa.nome" title="Logo da empresa" />
+          </div>
+          <div class="empresa-logo-placeholder" *ngIf="!empresa.logo">
+            <i class="pi pi-building"></i>
+          </div>
+          <div class="empresa-details">
+            <h1>{{ empresa.nome }}</h1>
+            <p class="empresa-meta">
+              <span><i class="pi pi-map-marker"></i> {{ empresa.cidade }}/{{ empresa.estado }}</span>
+              @if (empresa.segmento) {
+                <span><i class="pi pi-tag"></i> {{ empresa.segmento }}</span>
+              }
+            </p>
+          </div>
+        }
       </div>
-      <div class="empresa-stats" *ngIf="empresa">
-        <div class="stat-badge">
-          <span class="stat-number">{{ empresa.totalVagas }}</span>
-          <span class="stat-label">Vagas Abertas</span>
+      @if (empresa) {
+        <div class="empresa-stats">
+          <div class="stat-badge">
+            <span class="stat-number">{{ empresa.totalVagas }}</span>
+            <span class="stat-label">Vagas Abertas</span>
+          </div>
         </div>
-      </div>
+      }
     </div>
   </header>
 
@@ -100,7 +104,7 @@
           </div>
 
           <div class="vaga-card-footer">
-            <a [routerLink]="['/empresa', slug, 'vaga', vaga.id]" class="vaga-link">
+            <a [routerLink]="['/c', slug, 'vaga', vaga.id]" class="vaga-link">
               Ver Detalhes <i class="pi pi-arrow-right"></i>
             </a>
           </div>

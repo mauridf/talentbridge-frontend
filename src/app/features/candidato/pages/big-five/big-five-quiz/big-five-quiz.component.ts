@@ -167,4 +167,16 @@ export class BigFiveQuizComponent implements OnInit {
     };
     return nomes[traco || ''] || '';
   }
+
+  get perguntaAtualId(): number {
+    return this.perguntas[this.perguntaAtual]?.id ?? -1;
+  }
+
+  get perguntaAtualTraco(): string | undefined {
+    return this.perguntas[this.perguntaAtual]?.traco;
+  }
+
+  get perguntaAtualTexto(): string {
+    return this.perguntas[this.perguntaAtual]?.texto ?? '';
+  }
 }
