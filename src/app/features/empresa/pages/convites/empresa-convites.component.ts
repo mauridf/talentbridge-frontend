@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
@@ -10,38 +9,39 @@ import { TagModule } from 'primeng/tag';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { ConviteService, ConviteResponse } from '../../../../core/services/convite.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { TokenService } from '../../../../core/services/token.service';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { DataBrPipe } from '../../../../shared/pipes/data-br.pipe';
 
 @Component({
-  selector: 'app-admin-convites',
+  selector: 'app-empresa-convites',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ButtonModule, CardModule, InputTextModule,
+    CommonModule, FormsModule, ButtonModule, InputTextModule,
     TableModule, DialogModule, TagModule, SelectButtonModule,
-    ConfirmDialogModule, ToastModule, PageHeaderComponent,
-    LoadingSkeletonComponent, EmptyStateComponent, DataBrPipe,
+    ConfirmDialogModule, PageHeaderComponent, LoadingSkeletonComponent,
+    EmptyStateComponent, DataBrPipe,
   ],
   providers: [ConfirmationService],
   template: `
     <div class="page-container fade-in">
-      <app-page-header titulo="Gerenciar Convites" subtitulo="Criação e gestão de convites para empresas" [mostrarVoltar]="true">
+      <app-page-header titulo="Convites" subtitulo="Convide recrutadores para sua empresa" [mostrarVoltar]="true">
       </app-page-header>
 
       <div class="flex justify-content-end mb-3">
-        <p-button label="Novo Convite" icon="pi pi-plus" (onClick)="exibirCriar = true"></p-button>
+        <p-button label="Convidar Recrutador" icon="pi pi-plus" (onClick)="exibirCriar = true"></p-button>
       </div>
 
       @if (carregando) {
         <app-loading-skeleton type="table"></app-loading-skeleton>
       } @else if (convites.length === 0) {
-        <app-empty-state icone="pi pi-envelope" titulo="Nenhum convite" descricao="Nenhum convite encontrado."></app-empty-state>
+        <app-empty-state icone="pi pi-envelope" titulo="Nenhum convite" descricao="Você ainda não enviou nenhum convite."></app-empty-state>
       } @else {
         <div class="card">
           <p-table [value]="convites" styleClass="p-datatable-sm" [paginator]="true" [rows]="10">
@@ -72,85 +72,61 @@ import { DataBrPipe } from '../../../../shared/pipes/data-br.pipe';
         </div>
       }
 
-      <p-dialog [(visible)]="exibirCriar" header="Criar Convite" [modal]="true" styleClass="w-full max-w-30rem">
+      <p-dialog [(visible)]="exibirCriar" header="Convidar Recrutador" [modal]="true" styleClass="w-full max-w-30rem">
         <div class="flex flex-column gap-2">
-          <label>Email do Convidado</label>
-          <input pInputText [(ngModel)]="novoConvite.email" placeholder="email@exemplo.com" />
-          <label>Tipo de Convite</label>
-          <p-selectButton [options]="tiposConvite" [(ngModel)]="novoConvite.tipo" optionLabel="label" optionValue="value"></p-selectButton>
-
-          @if (novoConvite.tipo === 1) {
-            <label>CNPJ</label>
-            <input pInputText [(ngModel)]="novoConvite.cnpj" placeholder="Apenas números" />
-            <label>Nome da Empresa</label>
-            <input pInputText [(ngModel)]="novoConvite.nomeEmpresa" />
-            <label>Nome do Responsável</label>
-            <input pInputText [(ngModel)]="novoConvite.nomeResponsavel" />
-            <label>Telefone</label>
-            <input pInputText [(ngModel)]="novoConvite.telefone" placeholder="(11) 99999-9999" />
-          }
-          <p-button label="Criar Convite" [loading]="salvando" (onClick)="criar()"></p-button>
+          <label>Email do Recrutador</label>
+          <input pInputText [(ngModel)]="emailConvite" placeholder="email@exemplo.com" />
+          <p-button label="Enviar Convite" [loading]="salvando" (onClick)="criarConvite()"></p-button>
         </div>
       </p-dialog>
     </div>
   `,
 })
-export class AdminConvitesComponent implements OnInit {
+export class EmpresaConvitesComponent implements OnInit {
   carregando = true;
   salvando = false;
   convites: ConviteResponse[] = [];
   exibirCriar = false;
-
-  tiposConvite = [
-    { label: 'Recrutador', value: 0 },
-    { label: 'Empresa', value: 1 },
-  ];
-
-  novoConvite = {
-    email: '',
-    tipo: 0,
-    cnpj: '',
-    nomeEmpresa: '',
-    nomeResponsavel: '',
-    telefone: '',
-  };
-
+  emailConvite = '';
   empresaId = '';
 
   constructor(
     private conviteService: ConviteService,
     private notificationService: NotificationService,
+    private tokenService: TokenService,
     private confirmationService: ConfirmationService,
   ) {}
 
   ngOnInit(): void {
-    const claims = JSON.parse(sessionStorage.getItem('access_token') || '{}');
+    const claims = this.tokenService.obterClaims();
+    this.empresaId = claims?.idEmpresa || '';
     this.carregar();
   }
 
   private carregar(): void {
+    if (!this.empresaId) return;
     this.carregando = true;
-    this.conviteService.listarPorEmpresa('00000000-0000-0000-0000-000000000000')
+    this.conviteService.listarPorEmpresa(this.empresaId)
       .pipe(finalize(() => this.carregando = false))
       .subscribe({
-        next: (dados) => this.convites = dados,
-        error: (e) => this.notificationService.error('Erro', e.message),
+        next: (dados: ConviteResponse[]) => this.convites = dados,
+        error: (e: HttpErrorResponse) => this.notificationService.error('Erro', e.message),
       });
   }
 
-  criar(): void {
-    if (!this.novoConvite.email) return;
+  criarConvite(): void {
+    if (!this.emailConvite) return;
     this.salvando = true;
-    this.conviteService.criar(this.novoConvite)
+    this.conviteService.criar({ email: this.emailConvite, tipo: 0 })
       .pipe(finalize(() => this.salvando = false))
       .subscribe({
         next: () => {
-          this.notificationService.success('Convite criado!', '');
+          this.notificationService.success('Convite enviado!', '');
           this.exibirCriar = false;
+          this.emailConvite = '';
           this.carregar();
-          this.novoConvite = { email: '', tipo: 0, cnpj: '', nomeEmpresa: '', nomeResponsavel: '', telefone: '' };
         },
-        error: (e) => this.notificationService.error('Erro', e.message),
+        error: (e: HttpErrorResponse) => this.notificationService.error('Erro', e.message),
       });
   }
 
@@ -169,7 +145,7 @@ export class AdminConvitesComponent implements OnInit {
         this.notificationService.success('Convite inativado!', '');
         this.carregar();
       },
-      error: (e) => this.notificationService.error('Erro', e.message),
+      error: (e: HttpErrorResponse) => this.notificationService.error('Erro', e.message),
     });
   }
 }

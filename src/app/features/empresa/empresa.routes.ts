@@ -19,6 +19,20 @@ export const EMPRESA_ROUTES: Routes = [
       import('./pages/registro/registro-empresa.component').then((m) => m.RegistroEmpresaComponent),
   },
   {
+    path: 'perfil',
+    loadComponent: () =>
+      import('./pages/perfil-empresa/perfil-empresa.component').then(
+        (m) => m.PerfilEmpresaComponent,
+      ),
+  },
+  {
+    path: 'convites',
+    loadComponent: () =>
+      import('./pages/convites/empresa-convites.component').then(
+        (m) => m.EmpresaConvitesComponent,
+      ),
+  },
+  {
     path: 'oportunidades',
     loadComponent: () =>
       import('./pages/vagas/vaga-list/vaga-list.component').then((m) => m.VagaListComponent),

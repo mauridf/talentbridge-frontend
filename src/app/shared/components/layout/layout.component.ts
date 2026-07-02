@@ -235,8 +235,10 @@ export class LayoutComponent implements OnInit {
 
     const empresaMenu: MenuItem[] = [
       { label: 'Dashboard', icon: 'pi pi-home', routerLink: '/empresa/dashboard', visible: true },
+      { label: 'Perfil', icon: 'pi pi-building', routerLink: '/empresa/perfil', visible: true },
       { label: 'Vagas', icon: 'pi pi-briefcase', routerLink: '/empresa/oportunidades', visible: true },
       { label: 'Criar Vaga', icon: 'pi pi-plus-circle', routerLink: '/empresa/criar-vagas', visible: true },
+      { label: 'Convites', icon: 'pi pi-envelope', routerLink: '/empresa/convites', visible: true },
     ];
 
     const adminMenu: MenuItem[] = [
