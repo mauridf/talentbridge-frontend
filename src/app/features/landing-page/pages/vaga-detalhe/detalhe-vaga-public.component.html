@@ -50,9 +50,38 @@
 
         <div class="vaga-hero-right">
           <p-button
+            *ngIf="jaCandidatado"
+            label="Candidatura Realizada"
+            icon="pi pi-check"
+            styleClass="p-button-lg w-full p-button-success"
+            [disabled]="true"
+          >
+          </p-button>
+
+          <p-button
+            *ngIf="!jaCandidatado && isCandidato"
             label="Candidatar-se"
             icon="pi pi-send"
             styleClass="p-button-lg w-full"
+            [loading]="candidatando"
+            (onClick)="candidatar()"
+          >
+          </p-button>
+
+          <p-button
+            *ngIf="!jaCandidatado && !isCandidato && estaLogado"
+            label="Apenas candidatos"
+            icon="pi pi-lock"
+            styleClass="p-button-lg w-full p-button-secondary"
+            [disabled]="true"
+          >
+          </p-button>
+
+          <p-button
+            *ngIf="!estaLogado"
+            label="Fazer Login para Candidatar-se"
+            icon="pi pi-sign-in"
+            styleClass="p-button-lg w-full p-button-outlined"
             (onClick)="candidatar()"
           >
           </p-button>

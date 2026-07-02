@@ -41,4 +41,11 @@ export const CANDIDATO_ROUTES: Routes = [
         (m) => m.BigFiveResultadoComponent,
       ),
   },
+  {
+    path: 'minhas-candidaturas',
+    loadComponent: () =>
+      import('./pages/candidaturas/minhas-candidaturas.component').then(
+        (m) => m.MinhasCandidaturasComponent,
+      ),
+  },
 ];

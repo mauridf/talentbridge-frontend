@@ -226,8 +226,11 @@ export class LayoutComponent implements OnInit {
   private configurarMenu(perfil: PerfilUsuario): void {
     const candidatoMenu: MenuItem[] = [
       { label: 'Dashboard', icon: 'pi pi-home', routerLink: '/candidatos/dashboard', visible: true },
+      { label: 'Editar Perfil', icon: 'pi pi-user-edit', routerLink: '/candidatos/editar', visible: true },
+      { label: 'Perfil Profissional', icon: 'pi pi-briefcase', routerLink: '/candidatos/perfil-profissional', visible: true },
       { label: 'Teste Big Five', icon: 'pi pi-chart-bar', routerLink: '/candidatos/teste-big-five', visible: true },
       { label: 'Resultado', icon: 'pi pi-verified', routerLink: '/candidatos/resultado-big-five', visible: true },
+      { label: 'Minhas Candidaturas', icon: 'pi pi-send', routerLink: '/candidatos/minhas-candidaturas', visible: true },
     ];
 
     const empresaMenu: MenuItem[] = [
