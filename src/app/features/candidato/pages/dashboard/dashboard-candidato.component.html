@@ -30,7 +30,7 @@
             Status:
             <p-tag
               [value]="dashboard.statusPerfil === 'completo' ? 'Completo' : 'Incompleto'"
-              [severity]="dashboard.statusPerfil === 'completo' ? 'success' : 'warn'"
+              [severity]="dashboard.statusPerfil === 'completo' ? 'success' : 'warning'"
             >
             </p-tag>
           </p>
@@ -69,10 +69,7 @@
     <!-- Cards de Estatísticas -->
     <div class="stats-grid">
       <div class="stat-card card">
-        <div
-          class="stat-icon"
-          style="background: rgba(59, 130, 246, 0.1); color: var(--primary-color)"
-        >
+        <div class="stat-icon stat-icon-blue">
           <i class="pi pi-briefcase"></i>
         </div>
         <div class="stat-info">
@@ -82,10 +79,7 @@
       </div>
 
       <div class="stat-card card">
-        <div
-          class="stat-icon"
-          style="background: rgba(245, 158, 11, 0.1); color: var(--warning-color)"
-        >
+        <div class="stat-icon stat-icon-yellow">
           <i class="pi pi-calendar"></i>
         </div>
         <div class="stat-info">
@@ -95,10 +89,7 @@
       </div>
 
       <div class="stat-card card">
-        <div
-          class="stat-icon"
-          style="background: rgba(16, 185, 129, 0.1); color: var(--success-color)"
-        >
+        <div class="stat-icon stat-icon-green">
           <i class="pi pi-check-circle"></i>
         </div>
         <div class="stat-info">
@@ -108,7 +99,7 @@
       </div>
 
       <div class="stat-card card">
-        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1">
+        <div class="stat-icon stat-icon-purple">
           <i class="pi pi-eye"></i>
         </div>
         <div class="stat-info">
@@ -149,11 +140,11 @@
           </div>
           <div class="vaga-item-body">
             <span><i class="pi pi-building"></i> {{ vaga.empresa }}</span>
-            <span><i class="pi pi-calendar"></i> {{ vaga.dataCandidatura | dataBr }}</span>
+            <span><i class="pi pi-calendar"></i> {{ vaga.dataCandidatura || '' | dataBr }}</span>
           </div>
           <div *ngIf="vaga.entrevistaAgendada" class="vaga-item-entrevista">
             <i class="pi pi-video"></i>
-            Entrevista agendada: {{ vaga.dataEntrevista | dataBr: 'datetime' }}
+            Entrevista agendada: {{ vaga.dataEntrevista || '' | dataBr: 'datetime' }}
           </div>
         </div>
       </div>
@@ -174,7 +165,7 @@
             <h4>{{ vaga.titulo }}</h4>
             <span
               class="compatibilidade-badge"
-              [style.background]="getCorCompatibilidade(vaga.compatibilidade)"
+              [ngClass]="getCompatibilidadeClass(vaga.compatibilidade)"
             >
               {{ vaga.compatibilidade }}% match
             </span>
@@ -221,7 +212,7 @@
               [severity]="getStatusSeverity(candidatura.status)"
             >
             </p-tag>
-            <span class="candidatura-data">{{ candidatura.dataCandidatura | dataBr }}</span>
+            <span class="candidatura-data">{{ candidatura.dataCandidatura || '' | dataBr }}</span>
           </div>
         </div>
       </div>

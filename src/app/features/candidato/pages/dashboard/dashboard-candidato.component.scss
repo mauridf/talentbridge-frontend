@@ -59,6 +59,53 @@
   flex-shrink: 0;
 }
 
+// Classes para ícones de estatísticas
+.stat-icon-blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary-color);
+}
+
+.stat-icon-orange {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning-color);
+}
+
+.stat-icon-green {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success-color);
+}
+
+.stat-icon-purple {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+// Classes para compatibilidade
+.compatibilidade-badge {
+  font-size: 0.75rem;
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.compatibilidade-alta {
+  background: #10b981;
+}
+
+.compatibilidade-media {
+  background: #3b82f6;
+}
+
+.compatibilidade-regular {
+  background: #f59e0b;
+}
+
+.compatibilidade-baixa {
+  background: #ef4444;
+}
+
 .stat-info {
   display: flex;
   flex-direction: column;
@@ -169,15 +216,6 @@
     font-size: 0.9375rem;
     margin: 0;
   }
-}
-
-.compatibilidade-badge {
-  font-size: 0.75rem;
-  color: white;
-  padding: 0.125rem 0.5rem;
-  border-radius: 20px;
-  white-space: nowrap;
-  font-weight: 600;
 }
 
 .vaga-recomendada-body {

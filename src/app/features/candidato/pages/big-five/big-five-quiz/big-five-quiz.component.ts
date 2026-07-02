@@ -153,4 +153,18 @@ export class BigFiveQuizComponent implements OnInit {
         },
       });
   }
+
+  /**
+   * Retorna nome amigável do traço
+   */
+  getNomeTraco(traco?: string): string {
+    const nomes: Record<string, string> = {
+      extroversao: 'Extroversão',
+      amabilidade: 'Amabilidade',
+      consciencia: 'Consciência',
+      estabilidadeEmocional: 'Estabilidade Emocional',
+      aberturaExperiencia: 'Abertura à Experiência',
+    };
+    return nomes[traco || ''] || '';
+  }
 }

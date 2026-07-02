@@ -33,7 +33,6 @@ import { Subject, takeUntil, finalize } from 'rxjs';
     ChartModule,
     TooltipModule,
     LoadingSkeletonComponent,
-    EmptyStateComponent,
     ErrorStateComponent,
     PageHeaderComponent,
     DataBrPipe,
@@ -128,13 +127,16 @@ export class DashboardCandidatoComponent implements OnInit, OnDestroy {
 
   /**
    * Retorna a severidade da tag baseado no status
+   * PrimeNG 17+ usa: 'success' | 'info' | 'warning' | 'danger' | 'secondary' | 'contrast'
    */
-  getStatusSeverity(status: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
+  getStatusSeverity(
+    status: string,
+  ): 'success' | 'info' | 'warning' | 'danger' | 'secondary' | 'contrast' {
     switch (status?.toLowerCase()) {
       case 'em_andamento':
         return 'info';
       case 'entrevista':
-        return 'warn';
+        return 'warning'; // Era 'warn' → corrigido para 'warning'
       case 'contratado':
         return 'success';
       case 'encerrado':
@@ -161,12 +163,12 @@ export class DashboardCandidatoComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Retorna cor baseada na porcentagem de compatibilidade
+   * Retorna classe CSS baseada na porcentagem de compatibilidade
    */
-  getCorCompatibilidade(percentual: number): string {
-    if (percentual >= 80) return '#10B981'; // Verde - Alta
-    if (percentual >= 60) return '#3B82F6'; // Azul - Média
-    if (percentual >= 40) return '#F59E0B'; // Laranja - Regular
-    return '#EF4444'; // Vermelho - Baixa
+  getCompatibilidadeClass(percentual: number): string {
+    if (percentual >= 80) return 'compatibilidade-alta';
+    if (percentual >= 60) return 'compatibilidade-media';
+    if (percentual >= 40) return 'compatibilidade-regular';
+    return 'compatibilidade-baixa';
   }
 }
