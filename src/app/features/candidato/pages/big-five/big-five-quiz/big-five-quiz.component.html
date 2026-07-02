@@ -1,0 +1,102 @@
+<div class="bigfive-page page-container fade-in">
+  <div class="bigfive-container">
+    <!-- Cabeçalho -->
+    <div class="bigfive-header">
+      <h1>Teste Comportamental Big Five</h1>
+      <p>Responda as perguntas abaixo com sinceridade. Não existem respostas certas ou erradas.</p>
+
+      <!-- Barra de Progresso -->
+      <div class="bigfive-progress">
+        <p-progressBar [value]="progresso" [showValue]="true"></p-progressBar>
+        <span class="progress-text"
+          >Pergunta {{ perguntaAtual + 1 }} de {{ perguntas.length }}</span
+        >
+      </div>
+    </div>
+
+    <!-- Card da Pergunta -->
+    <p-card styleClass="bigfive-question-card">
+      <div class="question-content">
+        <!-- Número da Pergunta -->
+        <div class="question-number">
+          <span>Pergunta {{ perguntaAtual + 1 }}</span>
+          <span class="question-trait" [ngClass]="perguntas[perguntaAtual]?.traco">
+            {{ getNomeTraco(perguntas[perguntaAtual]?.traco) }}
+          </span>
+        </div>
+
+        <!-- Texto da Pergunta -->
+        <h2 class="question-text">
+          {{ perguntas[perguntaAtual]?.texto }}
+        </h2>
+
+        <!-- Opções de Resposta -->
+        <div class="question-options">
+          <div
+            *ngFor="let opcao of opcoes"
+            class="option-item"
+            [class.selected]="respostas[perguntas[perguntaAtual]?.id] === opcao.valor"
+            (click)="responder(opcao.valor)"
+          >
+            <div class="option-radio">
+              <div
+                class="radio-custom"
+                [class.active]="respostas[perguntas[perguntaAtual]?.id] === opcao.valor"
+              ></div>
+            </div>
+
+            <div class="option-content">
+              <span class="option-value">{{ opcao.valor }}</span>
+              <span class="option-label">{{ opcao.label }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+
+    <!-- Navegação -->
+    <div class="bigfive-navigation">
+      <p-button
+        label="Anterior"
+        icon="pi pi-arrow-left"
+        [disabled]="isPrimeira"
+        styleClass="p-button-outlined"
+        (onClick)="anterior()"
+      >
+      </p-button>
+
+      <div class="navigation-center">
+        <span *ngIf="!todasRespondidas" class="faltando-badge">
+          <i class="pi pi-exclamation-circle"></i>
+          {{ perguntasFaltando }} perguntas sem resposta
+        </span>
+        <span *ngIf="todasRespondidas" class="completo-badge">
+          <i class="pi pi-check-circle"></i>
+          Todas as perguntas respondidas!
+        </span>
+      </div>
+
+      <div class="navigation-right">
+        <p-button
+          *ngIf="!isUltima"
+          label="Próxima"
+          icon="pi pi-arrow-right"
+          iconPos="right"
+          [disabled]="!perguntaRespondida"
+          (onClick)="proxima()"
+        >
+        </p-button>
+
+        <p-button
+          *ngIf="isUltima"
+          label="Finalizar Teste"
+          icon="pi pi-check"
+          [loading]="enviando"
+          [disabled]="!todasRespondidas"
+          (onClick)="finalizar()"
+        >
+        </p-button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,230 @@
+<div class="dashboard-page page-container fade-in">
+  <!-- Cabeçalho -->
+  <app-page-header
+    [titulo]="'Olá, ' + (dashboard?.nome || 'Candidato') + '!'"
+    subtitulo="Acompanhe seu progresso e oportunidades"
+    textoBotao="Buscar Vagas"
+    iconeBotao="pi pi-search"
+  >
+  </app-page-header>
+
+  <!-- Loading -->
+  <app-loading-skeleton *ngIf="carregando" type="dashboard"></app-loading-skeleton>
+
+  <!-- Erro -->
+  <app-error-state
+    *ngIf="erro && !carregando"
+    [mensagem]="mensagemErro"
+    (tentarNovamente)="carregarDashboard()"
+  >
+  </app-error-state>
+
+  <!-- Conteúdo -->
+  <ng-container *ngIf="dashboard && !carregando">
+    <!-- Status do Perfil -->
+    <div class="perfil-status-card card">
+      <div class="perfil-status-header">
+        <div>
+          <h3>Perfil do Candidato</h3>
+          <p class="perfil-status-subtitle">
+            Status:
+            <p-tag
+              [value]="dashboard.statusPerfil === 'completo' ? 'Completo' : 'Incompleto'"
+              [severity]="dashboard.statusPerfil === 'completo' ? 'success' : 'warn'"
+            >
+            </p-tag>
+          </p>
+        </div>
+        <div class="perfil-status-actions">
+          <p-button
+            *ngIf="dashboard.statusPerfil !== 'completo'"
+            label="Completar Perfil"
+            icon="pi pi-user-edit"
+            styleClass="p-button-outlined"
+            routerLink="/candidatos/perfil"
+          >
+          </p-button>
+          <p-button
+            *ngIf="!dashboard.realizouBigFive"
+            label="Fazer Teste Big Five"
+            icon="pi pi-chart-bar"
+            styleClass="p-button-outlined p-button-secondary"
+            routerLink="/candidatos/teste-big-five"
+            [pTooltip]="'Aumente suas chances de match!'"
+          >
+          </p-button>
+        </div>
+      </div>
+
+      <div class="perfil-progress">
+        <p-progressBar
+          [value]="dashboard.percentualPerfil"
+          [showValue]="true"
+          [style]="{ height: '8px' }"
+        >
+        </p-progressBar>
+      </div>
+    </div>
+
+    <!-- Cards de Estatísticas -->
+    <div class="stats-grid">
+      <div class="stat-card card">
+        <div
+          class="stat-icon"
+          style="background: rgba(59, 130, 246, 0.1); color: var(--primary-color)"
+        >
+          <i class="pi pi-briefcase"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalVagasAplicadas }}</span>
+          <span class="stat-label">Vagas Aplicadas</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div
+          class="stat-icon"
+          style="background: rgba(245, 158, 11, 0.1); color: var(--warning-color)"
+        >
+          <i class="pi pi-calendar"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalEntrevistas }}</span>
+          <span class="stat-label">Entrevistas</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div
+          class="stat-icon"
+          style="background: rgba(16, 185, 129, 0.1); color: var(--success-color)"
+        >
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalContratacoes }}</span>
+          <span class="stat-label">Contratações</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1">
+          <i class="pi pi-eye"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalVagasVisualizadas }}</span>
+          <span class="stat-label">Vagas Visualizadas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico e Vagas em Andamento -->
+    <div class="dashboard-main-grid">
+      <!-- Gráfico -->
+      <div class="card chart-card">
+        <h3>Resumo de Atividades</h3>
+        <div class="chart-container">
+          <p-chart type="doughnut" [data]="dadosGrafico" [options]="opcoesGrafico" height="250px">
+          </p-chart>
+        </div>
+      </div>
+
+      <!-- Vagas em Andamento -->
+      <div class="card vagas-andamento-card">
+        <h3>Vagas em Andamento</h3>
+
+        <div *ngIf="dashboard.vagasEmAndamento.length === 0" class="no-data">
+          <i class="pi pi-inbox"></i>
+          <p>Nenhuma vaga em andamento</p>
+        </div>
+
+        <div *ngFor="let vaga of dashboard.vagasEmAndamento" class="vaga-item">
+          <div class="vaga-item-header">
+            <h4>{{ vaga.titulo }}</h4>
+            <p-tag
+              [value]="getStatusTexto(vaga.status)"
+              [severity]="getStatusSeverity(vaga.status)"
+            >
+            </p-tag>
+          </div>
+          <div class="vaga-item-body">
+            <span><i class="pi pi-building"></i> {{ vaga.empresa }}</span>
+            <span><i class="pi pi-calendar"></i> {{ vaga.dataCandidatura | dataBr }}</span>
+          </div>
+          <div *ngIf="vaga.entrevistaAgendada" class="vaga-item-entrevista">
+            <i class="pi pi-video"></i>
+            Entrevista agendada: {{ vaga.dataEntrevista | dataBr: 'datetime' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vagas Recomendadas -->
+    <div class="card vagas-recomendadas-card">
+      <h3>Vagas Recomendadas para Você</h3>
+
+      <div *ngIf="dashboard.vagasRecomendadas.length === 0" class="no-data">
+        <i class="pi pi-star"></i>
+        <p>Complete seu perfil para receber recomendações personalizadas</p>
+      </div>
+
+      <div class="vagas-recomendadas-grid">
+        <div *ngFor="let vaga of dashboard.vagasRecomendadas" class="vaga-recomendada-item">
+          <div class="vaga-recomendada-header">
+            <h4>{{ vaga.titulo }}</h4>
+            <span
+              class="compatibilidade-badge"
+              [style.background]="getCorCompatibilidade(vaga.compatibilidade)"
+            >
+              {{ vaga.compatibilidade }}% match
+            </span>
+          </div>
+          <div class="vaga-recomendada-body">
+            <span><i class="pi pi-building"></i> {{ vaga.empresa }}</span>
+            <span><i class="pi pi-map-marker"></i> {{ vaga.cidade }}/{{ vaga.estado }}</span>
+            <span *ngIf="vaga.salario"
+              ><i class="pi pi-dollar"></i> {{ vaga.salario | currency: 'BRL' }}</span
+            >
+          </div>
+          <p-button
+            label="Ver Vaga"
+            icon="pi pi-arrow-right"
+            styleClass="p-button-sm p-button-outlined w-full"
+            [routerLink]="['/candidatos/vaga', vaga.vagaId]"
+          >
+          </p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Últimas Candidaturas -->
+    <div class="card ultimas-candidaturas-card">
+      <h3>Últimas Candidaturas</h3>
+
+      <div *ngIf="dashboard.ultimasCandidaturas.length === 0" class="no-data">
+        <i class="pi pi-send"></i>
+        <p>Você ainda não se candidatou a nenhuma vaga</p>
+      </div>
+
+      <div class="ultimas-candidaturas-list">
+        <div *ngFor="let candidatura of dashboard.ultimasCandidaturas" class="candidatura-item">
+          <div class="candidatura-item-left">
+            <h4>{{ candidatura.titulo }}</h4>
+            <span>{{ candidatura.empresa }}</span>
+          </div>
+          <div class="candidatura-item-center">
+            <span class="candidatura-protocolo">Protocolo: {{ candidatura.protocolo }}</span>
+          </div>
+          <div class="candidatura-item-right">
+            <p-tag
+              [value]="getStatusTexto(candidatura.status)"
+              [severity]="getStatusSeverity(candidatura.status)"
+            >
+            </p-tag>
+            <span class="candidatura-data">{{ candidatura.dataCandidatura | dataBr }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

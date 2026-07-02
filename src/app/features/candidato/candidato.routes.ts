@@ -13,4 +13,32 @@ export const CANDIDATO_ROUTES: Routes = [
         (m) => m.RegistroCandidatoComponent,
       ),
   },
+  {
+    path: 'confirmar-email',
+    loadComponent: () =>
+      import('./pages/confirmar-email/confirmar-email.component').then(
+        (m) => m.ConfirmarEmailComponent,
+      ),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard-candidato.component').then(
+        (m) => m.DashboardCandidatoComponent,
+      ),
+  },
+  {
+    path: 'teste-big-five',
+    loadComponent: () =>
+      import('./pages/big-five/big-five-quiz/big-five-quiz.component').then(
+        (m) => m.BigFiveQuizComponent,
+      ),
+  },
+  {
+    path: 'resultado-big-five',
+    loadComponent: () =>
+      import('./pages/big-five/big-five-resultado/big-five-resultado.component').then(
+        (m) => m.BigFiveResultadoComponent,
+      ),
+  },
 ];
