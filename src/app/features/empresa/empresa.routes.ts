@@ -23,4 +23,21 @@ export const EMPRESA_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/vagas/vaga-list/vaga-list.component').then((m) => m.VagaListComponent),
   },
+  {
+    path: 'criar-vagas',
+    loadComponent: () =>
+      import('./pages/vagas/vaga-form/vaga-form.component').then((m) => m.VagaFormComponent),
+  },
+  {
+    path: 'editar-vagas/:id',
+    loadComponent: () =>
+      import('./pages/vagas/vaga-form/vaga-form.component').then((m) => m.VagaFormComponent),
+  },
+  {
+    path: 'candidaturas/:vagaId',
+    loadComponent: () =>
+      import('./pages/candidaturas/lista-candidaturas/lista-candidaturas.component').then(
+        (m) => m.ListaCandidaturasComponent,
+      ),
+  },
 ];

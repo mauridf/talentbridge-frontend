@@ -1,0 +1,104 @@
+<div class="candidaturas-page page-container fade-in">
+  <app-page-header
+    [titulo]="'Candidaturas - ' + (vagaTitulo || 'Vaga')"
+    subtitulo="Gerencie os candidatos desta vaga"
+    [mostrarVoltar]="true"
+    routerLink="/empresa/oportunidades"
+  >
+  </app-page-header>
+
+  <!-- Loading -->
+  <app-loading-skeleton *ngIf="carregando" type="table" [quantidade]="5"></app-loading-skeleton>
+
+  <!-- Erro -->
+  <app-error-state
+    *ngIf="erro && !carregando"
+    [mensagem]="mensagemErro"
+    (tentarNovamente)="carregarCandidaturas()"
+  >
+  </app-error-state>
+
+  <!-- Lista Vazia -->
+  <app-empty-state
+    *ngIf="!carregando && !erro && candidaturas.length === 0"
+    icone="pi pi-users"
+    titulo="Nenhuma candidatura"
+    descricao="Esta vaga ainda não recebeu candidaturas."
+  >
+  </app-empty-state>
+
+  <!-- Tabela de Candidaturas -->
+  <div *ngIf="!carregando && !erro && candidaturas.length > 0" class="card">
+    <p-table
+      [value]="candidaturas"
+      styleClass="p-datatable-sm"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20]"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Candidato</th>
+          <th>Email</th>
+          <th>Protocolo</th>
+          <th>Status</th>
+          <th>Data Candidatura</th>
+          <th>Ações</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-candidatura>
+        <tr>
+          <td>
+            <span class="candidato-nome">{{ candidatura.candidatoNome }}</span>
+          </td>
+          <td>{{ candidatura.candidatoEmail }}</td>
+          <td>
+            <span class="protocolo">{{ candidatura.protocolo }}</span>
+          </td>
+          <td>
+            <p-tag
+              [value]="getStatusTexto(candidatura)"
+              [severity]="getStatusSeverity(candidatura)"
+            >
+            </p-tag>
+          </td>
+          <td>{{ candidatura.createdAt || '' | dataBr }}</td>
+          <td>
+            <div class="candidatura-actions">
+              <p-button
+                icon="pi pi-user"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                pTooltip="Ver perfil do candidato"
+                [routerLink]="[
+                  '/empresa/pessoa-candidata',
+                  candidatura.candidatoId,
+                  candidatura.vagaId,
+                ]"
+              >
+              </p-button>
+
+              <p-button
+                *ngIf="!candidatura.entrevistaRealizada && !candidatura.contratado"
+                icon="pi pi-calendar-plus"
+                styleClass="p-button-rounded p-button-text p-button-sm"
+                pTooltip="Agendar Entrevista"
+                (onClick)="agendarEntrevista(candidatura)"
+              >
+              </p-button>
+
+              <p-button
+                *ngIf="candidatura.entrevistaRealizada && !candidatura.contratado"
+                icon="pi pi-check-circle"
+                styleClass="p-button-rounded p-button-text p-button-sm p-button-success"
+                pTooltip="Contratar"
+                (onClick)="contratar(candidatura)"
+              >
+              </p-button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1,0 +1,369 @@
+<div class="vaga-form-page page-container fade-in">
+  <!-- Cabeçalho -->
+  <div class="form-header">
+    <h1>{{ editando ? 'Editar Vaga' : 'Nova Vaga' }}</h1>
+    <p>Preencha as informações da vaga</p>
+  </div>
+
+  <!-- Steps -->
+  <p-steps [model]="steps" [activeIndex]="stepAtual" styleClass="mb-4"></p-steps>
+
+  <!-- Loading Domínios -->
+  <app-loading-spinner
+    *ngIf="carregandoDominios"
+    mensagem="Carregando opções..."
+  ></app-loading-spinner>
+
+  <!-- Formulário -->
+  <form *ngIf="!carregandoDominios" [formGroup]="form" (ngSubmit)="salvarVaga()">
+    <!-- STEP 1: Dados Básicos -->
+    <div *ngIf="stepAtual === 0" class="form-step fade-in">
+      <p-card>
+        <h3 class="step-title"><i class="pi pi-info-circle"></i> Dados Básicos da Vaga</h3>
+
+        <div class="form-grid">
+          <!-- Título -->
+          <div class="form-field full-width">
+            <label for="titulo">Título da Vaga *</label>
+            <input
+              id="titulo"
+              type="text"
+              pInputText
+              formControlName="titulo"
+              placeholder="Ex: Desenvolvedor Full Stack Pleno"
+            />
+            <small
+              *ngIf="form.get('titulo')?.invalid && form.get('titulo')?.touched"
+              class="form-error"
+            >
+              Título deve ter no mínimo 5 caracteres.
+            </small>
+          </div>
+
+          <!-- Cargo -->
+          <div class="form-field">
+            <label for="cargo">Cargo *</label>
+            <input
+              id="cargo"
+              type="text"
+              pInputText
+              formControlName="cargo"
+              placeholder="Ex: Desenvolvedor Full Stack"
+            />
+          </div>
+
+          <!-- Quantidade -->
+          <div class="form-field">
+            <label for="quantidadeVagas">Quantidade de Vagas *</label>
+            <p-inputNumber
+              id="quantidadeVagas"
+              formControlName="quantidadeVagas"
+              [min]="1"
+              [max]="99"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+            ></p-inputNumber>
+          </div>
+
+          <!-- Regime -->
+          <div class="form-field">
+            <label for="regimeTrabalho">Regime de Trabalho *</label>
+            <p-dropdown
+              id="regimeTrabalho"
+              formControlName="regimeTrabalho"
+              [options]="regimesTrabalho"
+              optionLabel="nome"
+              optionValue="codigo"
+              placeholder="Selecione"
+              styleClass="w-full"
+            ></p-dropdown>
+          </div>
+
+          <!-- Tipo Contratação -->
+          <div class="form-field">
+            <label for="tipoContratacao">Tipo de Contratação *</label>
+            <p-dropdown
+              id="tipoContratacao"
+              formControlName="tipoContratacao"
+              [options]="tiposContratacao"
+              optionLabel="nome"
+              optionValue="codigo"
+              placeholder="Selecione"
+              styleClass="w-full"
+            ></p-dropdown>
+          </div>
+
+          <!-- Jornada -->
+          <div class="form-field">
+            <label for="jornadaTrabalho">Jornada *</label>
+            <p-dropdown
+              id="jornadaTrabalho"
+              formControlName="jornadaTrabalho"
+              [options]="jornadasTrabalho"
+              optionLabel="nome"
+              optionValue="codigo"
+              placeholder="Selecione"
+              styleClass="w-full"
+            ></p-dropdown>
+          </div>
+
+          <!-- Salário -->
+          <div class="form-field">
+            <label for="salario">Salário (R$)</label>
+            <p-inputNumber
+              id="salario"
+              formControlName="salario"
+              mode="currency"
+              currency="BRL"
+              locale="pt-BR"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+            ></p-inputNumber>
+          </div>
+
+          <!-- Localização -->
+          <div class="form-field">
+            <label for="estado">Estado *</label>
+            <input id="estado" type="text" pInputText formControlName="estado" placeholder="SP" />
+          </div>
+
+          <div class="form-field">
+            <label for="cidade">Cidade *</label>
+            <input
+              id="cidade"
+              type="text"
+              pInputText
+              formControlName="cidade"
+              placeholder="São Paulo"
+            />
+          </div>
+
+          <!-- Período de Candidatura -->
+          <div class="form-field">
+            <label for="dataCandidaturaInicio">Início das Candidaturas *</label>
+            <p-calendar
+              id="dataCandidaturaInicio"
+              formControlName="dataCandidaturaInicio"
+              dateFormat="dd/mm/yy"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+            ></p-calendar>
+          </div>
+
+          <div class="form-field">
+            <label for="dataCandidaturaFim">Fim das Candidaturas *</label>
+            <p-calendar
+              id="dataCandidaturaFim"
+              formControlName="dataCandidaturaFim"
+              [minDate]="dataMinima"
+              dateFormat="dd/mm/yy"
+              styleClass="w-full"
+              inputStyleClass="w-full"
+            ></p-calendar>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- STEP 2: Descrição e Requisitos -->
+    <div *ngIf="stepAtual === 1" class="form-step fade-in">
+      <p-card>
+        <h3 class="step-title"><i class="pi pi-file-edit"></i> Descrição e Requisitos</h3>
+
+        <div class="form-grid">
+          <!-- Descrição -->
+          <div class="form-field full-width">
+            <label for="descricao">Descrição da Vaga *</label>
+            <textarea
+              id="descricao"
+              pInputTextarea
+              formControlName="descricao"
+              rows="5"
+              placeholder="Descreva detalhadamente a vaga, responsabilidades e expectativas..."
+              styleClass="w-full"
+            ></textarea>
+            <small
+              *ngIf="form.get('descricao')?.invalid && form.get('descricao')?.touched"
+              class="form-error"
+            >
+              Descrição deve ter no mínimo 50 caracteres.
+            </small>
+          </div>
+
+          <!-- Atividades -->
+          <div class="form-field full-width">
+            <label for="atividades">Atividades</label>
+            <textarea
+              id="atividades"
+              pInputTextarea
+              formControlName="atividades"
+              rows="3"
+              placeholder="Separe as atividades por ponto e vírgula (;)"
+              styleClass="w-full"
+            ></textarea>
+          </div>
+
+          <!-- Benefícios -->
+          <div class="form-field full-width">
+            <label for="beneficios">Benefícios</label>
+            <textarea
+              id="beneficios"
+              pInputTextarea
+              formControlName="beneficios"
+              rows="3"
+              placeholder="Separe os benefícios por ponto e vírgula (;)"
+              styleClass="w-full"
+            ></textarea>
+          </div>
+
+          <!-- Diferenciais -->
+          <div class="form-field full-width">
+            <label for="diferenciaisConsiderados">Diferenciais Considerados</label>
+            <textarea
+              id="diferenciaisConsiderados"
+              pInputTextarea
+              formControlName="diferenciaisConsiderados"
+              rows="2"
+              placeholder="Diferenciais que serão considerados um plus"
+              styleClass="w-full"
+            ></textarea>
+          </div>
+
+          <!-- Requisitos -->
+          <div class="form-field">
+            <label for="formacaoAcademica">Formação Acadêmica</label>
+            <p-dropdown
+              id="formacaoAcademica"
+              formControlName="formacaoAcademica"
+              [options]="formacoesAcademicas"
+              optionLabel="nome"
+              optionValue="codigo"
+              placeholder="Selecione"
+              styleClass="w-full"
+              [showClear]="true"
+            ></p-dropdown>
+          </div>
+
+          <div class="form-field flex-switch">
+            <p-inputSwitch
+              id="formacaoAcademicaEliminatorio"
+              formControlName="formacaoAcademicaEliminatorio"
+            ></p-inputSwitch>
+            <label for="formacaoAcademicaEliminatorio">Eliminatório</label>
+          </div>
+
+          <div class="form-field">
+            <label for="areaAtuacao">Área de Atuação</label>
+            <p-dropdown
+              id="areaAtuacao"
+              formControlName="areaAtuacao"
+              [options]="areasAtuacao"
+              optionLabel="nome"
+              optionValue="codigo"
+              placeholder="Selecione"
+              styleClass="w-full"
+              [showClear]="true"
+            ></p-dropdown>
+          </div>
+
+          <div class="form-field">
+            <label for="tempoExperiencia">Tempo de Experiência</label>
+            <p-dropdown
+              id="tempoExperiencia"
+              formControlName="tempoExperiencia"
+              [options]="temposExperiencia"
+              optionLabel="nome"
+              optionValue="codigo"
+              placeholder="Selecione"
+              styleClass="w-full"
+              [showClear]="true"
+            ></p-dropdown>
+          </div>
+
+          <div class="form-field flex-switch">
+            <p-inputSwitch
+              id="tempoExperienciaEliminatorio"
+              formControlName="tempoExperienciaEliminatorio"
+            ></p-inputSwitch>
+            <label for="tempoExperienciaEliminatorio">Eliminatório</label>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- STEP 3: Revisão -->
+    <div *ngIf="stepAtual === 2" class="form-step fade-in">
+      <p-card>
+        <h3 class="step-title"><i class="pi pi-check-circle"></i> Revisão da Vaga</h3>
+
+        <div class="revisao-grid">
+          <div class="revisao-item">
+            <strong>Título:</strong> <span>{{ form.value.titulo }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Cargo:</strong> <span>{{ form.value.cargo }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Regime:</strong>
+            <span>{{ getDominioNome(regimesTrabalho, form.value.regimeTrabalho) }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Tipo Contratação:</strong>
+            <span>{{ getDominioNome(tiposContratacao, form.value.tipoContratacao) }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Jornada:</strong>
+            <span>{{ getDominioNome(jornadasTrabalho, form.value.jornadaTrabalho) }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Salário:</strong> <span>{{ form.value.salario | currency: 'BRL' }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Local:</strong> <span>{{ form.value.cidade }}/{{ form.value.estado }}</span>
+          </div>
+          <div class="revisao-item">
+            <strong>Quantidade Vagas:</strong> <span>{{ form.value.quantidadeVagas }}</span>
+          </div>
+          <div class="revisao-item full-width">
+            <strong>Descrição:</strong>
+            <p>{{ form.value.descricao }}</p>
+          </div>
+        </div>
+      </p-card>
+    </div>
+
+    <!-- Navegação -->
+    <div class="form-navigation">
+      <p-button
+        *ngIf="stepAtual > 0"
+        label="Anterior"
+        icon="pi pi-arrow-left"
+        styleClass="p-button-outlined"
+        (onClick)="stepAnterior()"
+      >
+      </p-button>
+
+      <div class="navigation-spacer"></div>
+
+      <p-button
+        *ngIf="stepAtual < 2"
+        label="Próximo"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        [disabled]="!isStepValido(stepAtual)"
+        (onClick)="proximoStep()"
+      >
+      </p-button>
+
+      <p-button
+        *ngIf="stepAtual === 2"
+        type="submit"
+        label="Salvar Vaga"
+        icon="pi pi-check"
+        [loading]="enviando"
+        (onClick)="salvarVaga()"
+      >
+      </p-button>
+    </div>
+  </form>
+</div>
