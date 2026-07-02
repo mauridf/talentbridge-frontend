@@ -1,0 +1,110 @@
+<div class="dashboard-page page-container fade-in">
+  <app-page-header
+    titulo="Dashboard da Empresa"
+    subtitulo="Visão geral do seu processo seletivo"
+    textoBotao="Nova Vaga"
+    iconeBotao="pi pi-plus"
+    routerLink="/empresa/criar-vagas"
+  >
+  </app-page-header>
+
+  <!-- Loading -->
+  <app-loading-skeleton *ngIf="carregando" type="dashboard"></app-loading-skeleton>
+
+  <!-- Erro -->
+  <app-error-state
+    *ngIf="erro && !carregando"
+    [mensagem]="mensagemErro"
+    (tentarNovamente)="carregarDashboard()"
+  >
+  </app-error-state>
+
+  <!-- Conteúdo -->
+  <ng-container *ngIf="dashboard && !carregando">
+    <!-- Cards de Estatísticas -->
+    <div class="stats-grid">
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-blue">
+          <i class="pi pi-briefcase"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalVagasAtivas }}</span>
+          <span class="stat-label">Vagas Ativas</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-orange">
+          <i class="pi pi-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalCandidaturas }}</span>
+          <span class="stat-label">Candidaturas</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-green">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalContratados }}</span>
+          <span class="stat-label">Contratados</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-purple">
+          <i class="pi pi-wallet"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.creditosDisponiveis }}</span>
+          <span class="stat-label">Créditos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="card chart-card">
+      <h3>Candidaturas por Dia</h3>
+      <div class="chart-container">
+        <p-chart
+          type="line"
+          [data]="dadosGraficoCandidaturas"
+          [options]="opcoesGraficoCandidaturas"
+          height="300px"
+        >
+        </p-chart>
+      </div>
+    </div>
+
+    <!-- Vagas Próximas do Vencimento -->
+    <div class="card vagas-vencimento-card">
+      <h3>Vagas Próximas do Vencimento</h3>
+
+      <div *ngIf="!dashboard.vagasProximasVencer?.length" class="no-data">
+        <i class="pi pi-calendar"></i>
+        <p>Nenhuma vaga próxima do vencimento</p>
+      </div>
+
+      <div class="vagas-vencimento-list">
+        <div *ngFor="let vaga of dashboard.vagasProximasVencer" class="vencimento-item">
+          <div class="vencimento-item-left">
+            <h4>{{ vaga.titulo }}</h4>
+            <span>{{ vaga.totalCandidaturas }} candidaturas</span>
+          </div>
+          <div class="vencimento-item-right">
+            <span class="dias-restantes" [ngClass]="vaga.diasRestantes <= 3 ? 'urgente' : 'normal'">
+              {{ vaga.diasRestantes }} dias restantes
+            </span>
+            <p-tag
+              [value]="getStatusTexto(vaga.status)"
+              [severity]="getStatusSeverity(vaga.status)"
+            >
+            </p-tag>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

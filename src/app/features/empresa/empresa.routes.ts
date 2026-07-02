@@ -6,4 +6,16 @@ export const EMPRESA_ROUTES: Routes = [
     redirectTo: 'dashboard',
     pathMatch: 'full',
   },
+  {
+    path: 'dashboard',
+    loadComponent: () =>
+      import('./pages/dashboard/dashboard-empresa.component').then(
+        (m) => m.DashboardEmpresaComponent,
+      ),
+  },
+  {
+    path: 'registro',
+    loadComponent: () =>
+      import('./pages/registro/registro-empresa.component').then((m) => m.RegistroEmpresaComponent),
+  },
 ];
