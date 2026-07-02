@@ -31,7 +31,6 @@ import { Subject, takeUntil, finalize } from 'rxjs';
     LoadingSkeletonComponent,
     ErrorStateComponent,
     PageHeaderComponent,
-    DataBrPipe,
   ],
   templateUrl: './dashboard-empresa.component.html',
   styleUrls: ['./dashboard-empresa.component.scss'],
