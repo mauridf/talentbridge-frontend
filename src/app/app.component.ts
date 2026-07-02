@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { LoadingSpinnerComponent } from '@shared/components/loading-spinner/loading-spinner.component';
-import { LoadingService } from '@core/services/loading.service';
-import { NotificationService } from '@core/services/notification.service';
+import { LoadingSpinnerComponent } from '../app/shared/components/loading-spinner/loading-spinner.component';
+import { LoadingService } from '../app/core/services/loading.service';
+import { NotificationService } from '../app/core/services/notification.service';
 import { PrimeNGConfig } from 'primeng/api';
 
 @Component({

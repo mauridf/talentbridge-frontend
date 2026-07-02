@@ -13,10 +13,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
-import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '@core/services/notification.service';
-import { TokenService } from '@core/services/token.service';
-import { PerfilSelectorModalComponent } from '@shared/components/perfil-selector-modal/perfil-selector-modal.component';
+import { AuthService } from '../../../../core/services/auth.service';
+import { NotificationService } from '../../../../core/services/notification.service';
+import { TokenService } from '../../../../core/services/token.service';
+import { PerfilSelectorModalComponent } from '../../../../shared/components/perfil-selector-modal/perfil-selector-modal.component';
 import {
   LoginRequestDto,
   LoginMultiPerfilResponseDto,

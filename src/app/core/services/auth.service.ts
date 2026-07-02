@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, tap, map, catchError, throwError } from 'rxjs';
 import { environment } from '@environments/environment';
-import { TokenService } from '@core/services/token.service';
+import { TokenService } from '../../core/services/token.service';
 import {
   LoginRequestDto,
   LoginResponseDto,

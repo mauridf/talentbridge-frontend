@@ -1,0 +1,210 @@
+<div class="registro-page">
+  <div class="registro-container">
+    <p-card styleClass="registro-card">
+      <!-- Cabeçalho -->
+      <div class="registro-header">
+        <h1>Criar Conta de Candidato</h1>
+        <p>Preencha seus dados para começar a buscar vagas</p>
+      </div>
+
+      <p-divider></p-divider>
+
+      <!-- Sucesso -->
+      <div *ngIf="cadastroRealizado" class="registro-success fade-in">
+        <div class="success-icon">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <h2>Cadastro Realizado!</h2>
+        <p>
+          Enviamos um email de confirmação para <strong>{{ emailCadastrado }}</strong
+          >. Verifique sua caixa de entrada e clique no link para ativar sua conta.
+        </p>
+        <div class="success-actions">
+          <p-button label="Ir para o Login" icon="pi pi-sign-in" routerLink="/login"> </p-button>
+        </div>
+      </div>
+
+      <!-- Formulário -->
+      <form
+        *ngIf="!cadastroRealizado"
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="registro-form"
+      >
+        <!-- Dados Pessoais -->
+        <div class="form-section">
+          <h3><i class="pi pi-user"></i> Dados Pessoais</h3>
+
+          <div class="form-grid">
+            <!-- Nome -->
+            <div class="form-field full-width">
+              <label for="nome">Nome Completo *</label>
+              <input
+                id="nome"
+                type="text"
+                pInputText
+                formControlName="nome"
+                placeholder="Seu nome completo"
+              />
+              <small
+                *ngIf="form.get('nome')?.invalid && form.get('nome')?.touched"
+                class="form-error"
+              >
+                Nome completo é obrigatório (mínimo 3 caracteres).
+              </small>
+            </div>
+
+            <!-- Nome Social -->
+            <div class="form-field full-width">
+              <label for="nomeSocial">Nome Social</label>
+              <input
+                id="nomeSocial"
+                type="text"
+                pInputText
+                formControlName="nomeSocial"
+                placeholder="Como você prefere ser chamado(a)"
+              />
+            </div>
+
+            <!-- Email -->
+            <div class="form-field">
+              <label for="email">Email *</label>
+              <input
+                id="email"
+                type="email"
+                pInputText
+                formControlName="email"
+                placeholder="seu@email.com"
+              />
+              <small
+                *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+                class="form-error"
+              >
+                Email válido é obrigatório.
+              </small>
+            </div>
+
+            <!-- Telefone -->
+            <div class="form-field">
+              <label for="telefone">Telefone *</label>
+              <p-inputMask
+                id="telefone"
+                formControlName="telefone"
+                mask="(99) 99999-9999"
+                placeholder="(11) 99999-9999"
+              >
+              </p-inputMask>
+              <small
+                *ngIf="form.get('telefone')?.invalid && form.get('telefone')?.touched"
+                class="form-error"
+              >
+                Telefone é obrigatório.
+              </small>
+            </div>
+
+            <!-- Data de Nascimento -->
+            <div class="form-field">
+              <label for="dataNascimento">Data de Nascimento *</label>
+              <p-calendar
+                id="dataNascimento"
+                formControlName="dataNascimento"
+                [minDate]="dataMinima"
+                [maxDate]="dataMaxima"
+                dateFormat="dd/mm/yy"
+                placeholder="DD/MM/AAAA"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+              >
+              </p-calendar>
+              <small
+                *ngIf="form.get('dataNascimento')?.invalid && form.get('dataNascimento')?.touched"
+                class="form-error"
+              >
+                Data de nascimento é obrigatória.
+              </small>
+            </div>
+
+            <!-- Código Parceiro -->
+            <div class="form-field">
+              <label for="codigoParceiro">Código de Parceiro</label>
+              <input
+                id="codigoParceiro"
+                type="text"
+                pInputText
+                formControlName="codigoParceiro"
+                placeholder="Opcional"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Senha -->
+        <div class="form-section">
+          <h3><i class="pi pi-lock"></i> Senha</h3>
+
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="senha">Senha *</label>
+              <p-password
+                id="senha"
+                formControlName="senha"
+                [toggleMask]="true"
+                placeholder="Mínimo 6 caracteres"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+              >
+              </p-password>
+              <small
+                *ngIf="form.get('senha')?.invalid && form.get('senha')?.touched"
+                class="form-error"
+              >
+                Senha deve ter no mínimo 6 caracteres.
+              </small>
+            </div>
+
+            <div class="form-field">
+              <label for="confirmacaoSenha">Confirmar Senha *</label>
+              <p-password
+                id="confirmacaoSenha"
+                formControlName="confirmacaoSenha"
+                [toggleMask]="true"
+                [feedback]="false"
+                placeholder="Repita a senha"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+              >
+              </p-password>
+              <small
+                *ngIf="form.hasError('mismatch') && form.get('confirmacaoSenha')?.touched"
+                class="form-error"
+              >
+                As senhas não conferem.
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="form-actions">
+          <p-button
+            type="submit"
+            label="Criar Conta"
+            icon="pi pi-user-plus"
+            [loading]="carregando"
+            styleClass="w-full"
+          >
+          </p-button>
+        </div>
+
+        <!-- Link Login -->
+        <div class="form-footer">
+          <p>Já tem uma conta?</p>
+          <a routerLink="/login">
+            <i class="pi pi-sign-in"></i>
+            Fazer Login
+          </a>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

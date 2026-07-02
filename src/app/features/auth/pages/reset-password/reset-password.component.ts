@@ -11,8 +11,8 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
 import { CardModule } from 'primeng/card';
-import { AuthService } from '../../services/auth.service';
-import { NotificationService } from '@core/services/notification.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { finalize } from 'rxjs';
 
 @Component({

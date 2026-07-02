@@ -1,6 +1,6 @@
 import { Directive, Input, TemplateRef, ViewContainerRef, OnInit, OnDestroy } from '@angular/core';
-import { TokenService } from '@core/services/token.service';
-import { PerfilUsuario } from '@core/models/auth.models';
+import { TokenService } from '../../core/services/token.service';
+import { PerfilUsuario } from '../../core/models/auth.models';
 import { Subscription } from 'rxjs';
 
 /**
