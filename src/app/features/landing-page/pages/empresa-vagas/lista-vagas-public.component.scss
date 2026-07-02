@@ -235,3 +235,22 @@
     grid-template-columns: 1fr;
   }
 }
+
+.vaga-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  i {
+    font-size: 0.75rem;
+  }
+}

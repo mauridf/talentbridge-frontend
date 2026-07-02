@@ -4,7 +4,7 @@
     <div class="landing-header-content">
       <div class="empresa-info">
         <div class="empresa-logo" *ngIf="empresa?.logo">
-          <img [src]="empresa?.logo" [alt]="empresa?.nome" />
+          <img [src]="empresa.logo" [alt]="'Logo ' + empresa.nome" title="Logo da empresa" />
         </div>
         <div class="empresa-logo-placeholder" *ngIf="!empresa?.logo">
           <i class="pi pi-building"></i>
@@ -15,7 +15,7 @@
             <span
               ><i class="pi pi-map-marker"></i> {{ empresa?.cidade }}/{{ empresa?.estado }}</span
             >
-            <span *ngIf="empresa?.segmento"><i class="pi pi-tag"></i> {{ empresa?.segmento }}</span>
+            <span *ngIf="empresa?.segmento"><i class="pi pi-tag"></i> {{ empresa.segmento }}</span>
           </p>
         </div>
       </div>
@@ -100,14 +100,9 @@
           </div>
 
           <div class="vaga-card-footer">
-            <p-button
-              label="Ver Detalhes"
-              icon="pi pi-arrow-right"
-              iconPos="right"
-              styleClass="p-button-outlined p-button-sm"
-              [routerLink]="['/empresa', slug, 'vaga', vaga.id]"
-            >
-            </p-button>
+            <a [routerLink]="['/empresa', slug, 'vaga', vaga.id]" class="vaga-link">
+              Ver Detalhes <i class="pi pi-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -117,7 +112,9 @@
   <!-- Footer -->
   <footer class="landing-footer">
     <div class="landing-footer-content">
-      <p>© {{ anoAtual }} {{ empresa?.nome || 'TalentBridge' }}. Todos os direitos reservados.</p>
+      <p>
+        &copy; {{ anoAtual }} {{ empresa?.nome || 'TalentBridge' }}. Todos os direitos reservados.
+      </p>
       <p class="powered-by">Powered by <strong>TalentBridge</strong></p>
     </div>
   </footer>

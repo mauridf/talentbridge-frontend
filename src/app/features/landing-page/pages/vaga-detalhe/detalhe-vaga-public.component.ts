@@ -1,17 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { DividerModule } from 'primeng/divider';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
+import { ErrorStateComponent } from '../../../../shared/components/error-state/error-state.component';
+import { DataBrPipe } from '../../../../shared/pipes/data-br.pipe';
 import { LandingPageService, VagaDetalheLandingPage } from '../../services/landing-page.service';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-detalhe-vaga-public',
   standalone: true,
-  imports: [CommonModule, ButtonModule, CardModule, TagModule, DividerModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterModule,
+    ButtonModule,
+    CardModule,
+    TagModule,
+    DividerModule,
+    LoadingSpinnerComponent,
+    ErrorStateComponent,
+    DataBrPipe,
+  ],
   templateUrl: './detalhe-vaga-public.component.html',
   styleUrls: ['./detalhe-vaga-public.component.scss'],
 })
@@ -19,7 +33,7 @@ export class DetalheVagaPublicComponent implements OnInit {
   carregando = true;
   erro = false;
   mensagemErro = '';
-  vaga?: VagaDetalheLandingPage;
+  vaga: VagaDetalheLandingPage | null = null;
   slug = '';
 
   constructor(
@@ -74,8 +88,10 @@ export class DetalheVagaPublicComponent implements OnInit {
     return this.vaga.beneficios.split(';').filter((b) => b.trim());
   }
 
+  /**
+   * Redireciona para página de registro de candidato
+   */
   candidatar(): void {
-    // Redireciona para registro de candidato
     window.location.href = '/candidatos/registro';
   }
 }

@@ -19,7 +19,7 @@
       <!-- Cabeçalho da Vaga -->
       <div class="vaga-hero card">
         <div class="vaga-hero-left">
-          <p-tag value="Vaga" severity="info" styleClass="mb-2"></p-tag>
+          <p-tag value="Vaga" severity="info"></p-tag>
           <h1>{{ vaga.titulo }}</h1>
           <p class="vaga-empresa">{{ vaga.empresaNome }}</p>
 
@@ -120,7 +120,7 @@
           </div>
 
           <!-- Competências -->
-          <div class="card vaga-section" *ngIf="vaga.competencias?.length">
+          <div class="card vaga-section" *ngIf="vaga.competencias && vaga.competencias.length > 0">
             <h2><i class="pi pi-code"></i> Competências</h2>
             <div class="competencias-list">
               <span class="competencia-tag" *ngFor="let comp of vaga.competencias">

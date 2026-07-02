@@ -1,11 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TagModule } from 'primeng/tag';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
+import { ErrorStateComponent } from '../../../../shared/components/error-state/error-state.component';
+import { DataBrPipe } from '../../../../shared/pipes/data-br.pipe';
 import {
   LandingPageService,
   EmpresaLandingPage,
@@ -16,7 +20,20 @@ import { Subject, takeUntil, finalize } from 'rxjs';
 @Component({
   selector: 'app-lista-vagas-public',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, CardModule, TagModule, InputTextModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    RouterModule,
+    FormsModule,
+    ButtonModule,
+    CardModule,
+    TagModule,
+    InputTextModule,
+    LoadingSkeletonComponent,
+    EmptyStateComponent,
+    ErrorStateComponent,
+    DataBrPipe,
+  ],
   templateUrl: './lista-vagas-public.component.html',
   styleUrls: ['./lista-vagas-public.component.scss'],
 })
@@ -25,7 +42,7 @@ export class ListaVagasPublicComponent implements OnInit, OnDestroy {
   erro = false;
   mensagemErro = '';
 
-  empresa?: EmpresaLandingPage;
+  empresa: EmpresaLandingPage | null = null;
   vagas: VagaLandingPage[] = [];
   vagasFiltradas: VagaLandingPage[] = [];
   termoBusca = '';
@@ -47,6 +64,13 @@ export class ListaVagasPublicComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Retorna o ano atual para o footer
+   */
+  get anoAtual(): number {
+    return new Date().getFullYear();
   }
 
   carregarPagina(): void {
@@ -91,7 +115,7 @@ export class ListaVagasPublicComponent implements OnInit, OnDestroy {
         next: (data) => {
           this.empresa = data.empresa;
           this.vagas = data.vagas;
-          this.vagasFiltradas = data.vagas;
+          this.vagasFiltradas = [...data.vagas];
         },
         error: (error) => {
           this.erro = true;
@@ -105,7 +129,7 @@ export class ListaVagasPublicComponent implements OnInit, OnDestroy {
    */
   filtrarVagas(): void {
     if (!this.termoBusca.trim()) {
-      this.vagasFiltradas = this.vagas;
+      this.vagasFiltradas = [...this.vagas];
       return;
     }
 
