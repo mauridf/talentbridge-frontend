@@ -1,0 +1,120 @@
+<div class="admin-dashboard-page page-container fade-in">
+  <app-page-header titulo="Painel Administrativo" subtitulo="Visão geral do sistema TalentBridge">
+  </app-page-header>
+
+  <!-- Loading -->
+  <app-loading-skeleton *ngIf="carregando" type="dashboard"></app-loading-skeleton>
+
+  <!-- Erro -->
+  <app-error-state
+    *ngIf="erro && !carregando"
+    [mensagem]="mensagemErro"
+    (tentarNovamente)="carregarDashboard()"
+  >
+  </app-error-state>
+
+  <!-- Conteúdo -->
+  <ng-container *ngIf="dashboard && !carregando">
+    <!-- Cards de Estatísticas -->
+    <div class="stats-grid">
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-blue">
+          <i class="pi pi-building"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalEmpresas }}</span>
+          <span class="stat-label">Empresas</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-green">
+          <i class="pi pi-users"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalCandidatos }}</span>
+          <span class="stat-label">Candidatos</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-orange">
+          <i class="pi pi-briefcase"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalVagasAtivas }}</span>
+          <span class="stat-label">Vagas Ativas</span>
+        </div>
+      </div>
+
+      <div class="stat-card card">
+        <div class="stat-icon stat-icon-purple">
+          <i class="pi pi-check-circle"></i>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value">{{ dashboard.totalContratacoes }}</span>
+          <span class="stat-label">Contratações</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métricas Adicionais -->
+    <div class="metrics-grid">
+      <div class="metric-card card">
+        <span class="metric-value">{{ dashboard.totalVagas }}</span>
+        <span class="metric-label">Total de Vagas</span>
+      </div>
+      <div class="metric-card card">
+        <span class="metric-value">{{ dashboard.totalCandidaturas }}</span>
+        <span class="metric-label">Candidaturas</span>
+      </div>
+      <div class="metric-card card">
+        <span class="metric-value">{{ dashboard.taxaConversao }}%</span>
+        <span class="metric-label">Taxa de Conversão</span>
+      </div>
+    </div>
+
+    <!-- Gráfico -->
+    <div class="card chart-card">
+      <h3>Distribuição do Sistema</h3>
+      <div class="chart-container">
+        <p-chart type="doughnut" [data]="dadosGrafico" [options]="opcoesGrafico" height="300px">
+        </p-chart>
+      </div>
+    </div>
+
+    <!-- Links Rápidos -->
+    <div class="quick-links-grid">
+      <div class="quick-link-card card" routerLink="/admin/geocode">
+        <i class="pi pi-map-marker"></i>
+        <h4>Geocode</h4>
+        <p>Gerenciar coordenadas</p>
+      </div>
+      <div class="quick-link-card card" routerLink="/admin/monitor">
+        <i class="pi pi-desktop"></i>
+        <h4>Monitor</h4>
+        <p>Saúde do sistema</p>
+      </div>
+      <div class="quick-link-card card" routerLink="/admin/convites">
+        <i class="pi pi-envelope"></i>
+        <h4>Convites</h4>
+        <p>Gerenciar convites</p>
+      </div>
+      <div class="quick-link-card card" routerLink="/admin/creditos">
+        <i class="pi pi-wallet"></i>
+        <h4>Créditos</h4>
+        <p>Gerenciar créditos</p>
+      </div>
+      <div class="quick-link-card card" routerLink="/admin/cupons">
+        <i class="pi pi-ticket"></i>
+        <h4>Cupons</h4>
+        <p>Gerenciar cupons</p>
+      </div>
+      <div class="quick-link-card card" routerLink="/admin/parametros">
+        <i class="pi pi-cog"></i>
+        <h4>Parâmetros</h4>
+        <p>Configurações gerais</p>
+      </div>
+    </div>
+  </ng-container>
+</div>
