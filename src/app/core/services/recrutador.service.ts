@@ -12,6 +12,12 @@ export interface CriarRecrutadorRequest {
   confirmacaoSenha: string;
 }
 
+export interface CriarRecrutadorDiretoRequest {
+  nome: string;
+  email: string;
+  senha: string;
+}
+
 export interface CriarRecrutadorResponse {
   id: string;
   nome: string;
@@ -30,6 +36,17 @@ export class RecrutadorService {
       map((response) => {
         if (!response.sucesso || !response.valor) {
           throw new Error(response.erros?.[0]?.mensagem || 'Erro ao criar recrutador');
+        }
+        return response.valor;
+      }),
+    );
+  }
+
+  criarDireto(request: CriarRecrutadorDiretoRequest): Observable<CriarRecrutadorResponse> {
+    return this.http.post<ResultadoDto<CriarRecrutadorResponse>>(`${this.apiUrl}/direto`, request).pipe(
+      map((response) => {
+        if (!response.sucesso || !response.valor) {
+          throw new Error(response.erros?.[0]?.mensagem || 'Erro ao adicionar recrutador');
         }
         return response.valor;
       }),

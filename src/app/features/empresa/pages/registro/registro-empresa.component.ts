@@ -15,7 +15,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { EmpresaService } from '../../services/empresa.service';
+import { EmpresaService, CriarEmpresaRequest } from '../../services/empresa.service';
 import { SegmentoService, Segmento } from '../../../../core/services/segmento.service';
 import { ConviteService } from '../../../../core/services/convite.service';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -118,15 +118,12 @@ export class RegistroEmpresaComponent implements OnInit {
 
     this.carregando = true;
 
-    const request: Record<string, unknown> = {
+    const request: CriarEmpresaRequest = {
       ...this.form.value,
       cnpj: this.form.value.cnpj.replace(/\D/g, ''),
       telefoneEmpresa: this.form.value.telefoneEmpresa.replace(/\D/g, ''),
+      tokenConvite: this.tokenConvite || undefined,
     };
-
-    if (this.tokenConvite) {
-      request.tokenConvite = this.tokenConvite;
-    }
 
     this.empresaService
       .criarEmpresa(request)

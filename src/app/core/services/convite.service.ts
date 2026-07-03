@@ -21,6 +21,7 @@ export interface ConviteResponse {
   token: string;
   dataExpiracao: string;
   dataAceite?: string;
+  nomeEmpresa?: string;
 }
 
 @Injectable({ providedIn: 'root' })

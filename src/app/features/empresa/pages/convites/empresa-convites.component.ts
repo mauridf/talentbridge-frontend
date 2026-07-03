@@ -226,12 +226,10 @@ export class EmpresaConvitesComponent implements OnInit {
     }
 
     this.salvandoAdicionar = true;
-    this.recrutadorService.criar({
-      tokenConvite: '',
+    this.recrutadorService.criarDireto({
       nome: r.nome,
       email: r.email,
       senha: r.senha,
-      confirmacaoSenha: r.senha,
     }).pipe(finalize(() => this.salvandoAdicionar = false))
       .subscribe({
         next: (response) => {
