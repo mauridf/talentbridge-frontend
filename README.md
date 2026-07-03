@@ -1,27 +1,27 @@
 # TalentBridge Frontend
 
-Frontend da plataforma **TalentBridge (GoBee Jobs)** - conectando talentos às melhores oportunidades.
+Plataforma de recrutamento e seleção que conecta talentos às melhores oportunidades.
 
-## 🚀 Stack Tecnológica
+## Stack Tecnológica
 
-| Tecnologia | Versão | Uso |
-|------------|--------|-----|
-| **Angular** | 18+ (standalone) | Framework SPA |
-| **PrimeNG** | 17+ | Componentes UI |
-| **PrimeFlex** | 3+ | Layout CSS |
-| **PrimeIcons** | 7+ | Ícones |
-| **RxJS** | 7+ | Programação reativa |
-| **Chart.js** | 4+ | Gráficos |
-| **date-fns** | 3+ | Manipulação de datas |
+| Tecnologia | Versão | Finalidade |
+|---|---|---|
+| Angular | 18+ (standalone) | SPA |
+| PrimeNG | 17+ | Componentes de interface |
+| PrimeFlex | 3+ | Layout e grid CSS |
+| PrimeIcons | 7+ | Iconografia |
+| RxJS | 7+ | Programação reativa |
+| Chart.js | 4+ | Gráficos e dashboards |
+| date-fns | 3+ | Manipulação de datas |
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
-- **Node.js** 18.x ou 20.x
-- **npm** 9+ ou **yarn** 1.22+
-- **Angular CLI** 18+
-- **Git**
+- Node.js 18.x ou 20.x
+- npm 9+ ou yarn 1.22+
+- Angular CLI 18+
+- Git
 
-## 🔧 Instalação
+## Instalação
 
 ```bash
 # Clonar o repositório
@@ -33,112 +33,114 @@ npm install --legacy-peer-deps
 
 # Iniciar servidor de desenvolvimento
 ng serve
-Acesse http://localhost:4200/ no navegador.
+```
 
-🏗️ Estrutura do Projeto
-text
+Acesse `http://localhost:4200/` no navegador.
+
+## Estrutura do Projeto
+
+```
 src/
 ├── app/
-│   ├── core/                    # Serviços singleton, guards, interceptors
-│   │   ├── guards/              # AuthGuard, CandidatoGuard, EmpresaGuard, AdminGuard
-│   │   ├── interceptors/        # Auth, Error, Loading
-│   │   ├── services/            # Token, Notification, Loading, Dominio
-│   │   └── models/              # DTOs e interfaces
-│   ├── shared/                  # Componentes, pipes, directives reutilizáveis
-│   │   ├── components/          # LoadingSpinner, Skeleton, EmptyState, etc.
-│   │   ├── pipes/               # CPF/CNPJ, Telefone, Data
-│   │   └── directives/          # Permissao
-│   └── features/                # Módulos lazy-loading
-│       ├── auth/                # Login, Forgot/Reset Password
-│       ├── candidato/           # Dashboard, Perfil, Big Five, Candidaturas
-│       ├── empresa/             # Dashboard, Vagas, Candidaturas, Créditos
-│       ├── admin/               # Dashboard, Monitor, Convites, Parâmetros
-│       └── landing-page/        # Páginas públicas de vagas
-├── assets/                      # Imagens, ícones, fonts
-├── environments/                # Configurações por ambiente
-└── styles/                      # SCSS global e temas
-🔑 Autenticação
-O sistema suporta 4 perfis de acesso:
+│   ├── core/                       # Serviços singleton, guards, interceptors
+│   │   ├── guards/                 # AuthGuard, CandidatoGuard, EmpresaGuard, AdminGuard
+│   │   ├── interceptors/           # Auth, Error, Loading
+│   │   ├── services/               # Serviços globais (Token, Notification, etc.)
+│   │   └── models/                 # DTOs e interfaces compartilhadas
+│   ├── shared/                     # Componentes, pipes e diretivas reutilizáveis
+│   │   ├── components/             # LoadingSpinner, Skeleton, EmptyState, etc.
+│   │   ├── pipes/                  # Formatação CPF/CNPJ, Telefone, Data
+│   │   └── directives/             # Diretiva de permissão
+│   └── features/                   # Módulos carregados sob demanda (lazy)
+│       ├── auth/                   # Login, Recuperação de senha
+│       ├── candidato/              # Dashboard, Perfil, Big Five, Candidaturas
+│       ├── empresa/                # Dashboard, Vagas, Candidaturas, Colaboradores
+│       ├── admin/                  # Dashboard, Monitor, Convites, Parâmetros
+│       └── landing-page/           # Páginas públicas de vagas
+├── assets/                         # Imagens, ícones, fontes
+├── environments/                   # Configurações por ambiente (dev/prod)
+└── styles/                         # SCSS global e tema
+```
 
-Candidato: Busca vagas, candidatura, teste comportamental
+## Autenticação
 
-Recrutador: Gestão de vagas e candidaturas
+O sistema possui quatro perfis de acesso:
 
-Gestor de Empresa: Dashboard, vagas, relatórios, créditos
+- **Candidato** — busca vagas, candidatura, teste comportamental
+- **Recrutador** — gestão de vagas e candidaturas
+- **Gestor de Empresa** — dashboard, vagas, relatórios, colaboradores
+- **Administrador** — acesso total ao sistema
 
-Administrador: Acesso total ao sistema
+### Fluxo de Login
 
-Fluxo de Login
-Login com email/senha
+- Login com email e senha
+- Suporte a multi-perfil (seleção após login)
+- Suporte a multi-empresa (seleção após login)
+- Refresh token automático via cookie httpOnly
 
-Suporte a multi-perfil (seleção após login)
+## Comandos Disponíveis
 
-Suporte a multi-empresa (seleção após login)
-
-Refresh token automático via cookie httpOnly
-
-🛠️ Comandos Disponíveis
-bash
+```bash
 # Desenvolvimento
-ng serve                    # Servidor de desenvolvimento (porta 4200)
-ng serve --open             # Abre navegador automaticamente
+ng serve                              # Servidor de desenvolvimento (porta 4200)
+ng serve --open                       # Abre o navegador automaticamente
 
 # Build
-ng build                    # Build de desenvolvimento
-ng build --configuration=production  # Build de produção
+ng build                              # Build de desenvolvimento
+ng build --configuration=production   # Build de produção
 
 # Testes
-ng test                     # Testes unitários (Jasmine/Karma)
-ng e2e                      # Testes end-to-end (Cypress)
+ng test                               # Testes unitários (Jasmine/Karma)
+ng e2e                                # Testes end-to-end (Cypress)
 
 # Lint
-ng lint                     # Verificação de código (ESLint)
-ng lint --fix               # Correção automática
+ng lint                               # Verificação de código (ESLint)
+ng lint --fix                         # Correção automática
 
 # Geração de componentes
 ng generate component features/nome-do-componente --standalone
-📦 Deploy no Render
-Configuração
-O projeto está configurado para deploy no Render.
+```
 
-Crie uma conta no Render
+## Deploy no Render
 
-Conecte seu repositório GitHub
+1. Crie uma conta no [Render](https://render.com)
+2. Conecte seu repositório GitHub
+3. Crie um **Static Site**
+4. Configure:
 
-Crie um novo Static Site ou Web Service
+| Configuração | Valor |
+|---|---|
+| **Build Command** | `npm install --legacy-peer-deps && npm run build --configuration=production` |
+| **Publish Directory** | `dist/talentbridge-frontend/browser` |
 
-Configure:
+### Variáveis de Ambiente
 
-Build Command:
+| Variável | Descrição |
+|---|---|
+| `API_URL` | URL do backend em produção |
 
-bash
-npm install --legacy-peer-deps && npm run build --configuration=production
-Publish Directory:
+### Redirect para SPA
 
-text
-dist/talentbridge-frontend/browser
-Adicione as variáveis de ambiente:
+Adicione uma regra de **rewrite** no Render para suportar rotas do Angular:
 
-API_URL: URL do backend em produção
+- **Source:** `/*`
+- **Destination:** `/index.html`
+- **Action:** Rewrite
 
-Redirect para SPA
-Adicione uma regra de rewrite no Render para suportar rotas do Angular:
+## Temas e Customização
 
-text
-Source: /*
-Destination: /index.html
-Action: Rewrite
-🎨 Temas e Customização
-O tema é configurado através de variáveis CSS em src/styles/styles.scss:
+O tema é configurado através de variáveis CSS em `src/styles/styles.scss`:
 
-scss
+```scss
 :root {
   --primary-color: #3B82F6;
   --secondary-color: #10B981;
   --success-color: #22C55E;
   --warning-color: #F59E0B;
   --danger-color: #EF4444;
-  // ...
 }
-📄 Licença
+```
+
+## Licença
+
 Este projeto é proprietário. Todos os direitos reservados.
