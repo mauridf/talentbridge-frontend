@@ -4,7 +4,7 @@
     subtitulo="Visão geral do seu processo seletivo"
     textoBotao="Nova Vaga"
     iconeBotao="pi pi-plus"
-    routerLink="/empresa/criar-vagas"
+    (acaoBotao)="navegarParaCriarVaga()"
   >
   </app-page-header>
 
@@ -82,7 +82,7 @@
     <div class="card vagas-vencimento-card">
       <h3>Vagas Próximas do Vencimento</h3>
 
-      <div *ngIf="!dashboard.vagasProximasVencer?.length" class="no-data">
+      <div *ngIf="dashboard.vagasProximasVencer.length === 0" class="no-data">
         <i class="pi pi-calendar"></i>
         <p>Nenhuma vaga próxima do vencimento</p>
       </div>

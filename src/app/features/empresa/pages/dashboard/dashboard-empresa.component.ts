@@ -9,7 +9,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { ErrorStateComponent } from '../../../../shared/components/error-state/error-state.component';
 import { PageHeaderComponent } from '../../../../shared/components/page-header/page-header.component';
-import { DataBrPipe } from '../../../../shared/pipes/data-br.pipe';
+import { Router } from '@angular/router';
 import {
   DashboardEmpresaService,
   DashboardEmpresaResponse,
@@ -22,7 +22,6 @@ import { Subject, takeUntil, finalize } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
     ButtonModule,
     CardModule,
     TagModule,
@@ -48,7 +47,10 @@ export class DashboardEmpresaComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(private dashboardService: DashboardEmpresaService) {}
+  constructor(
+    private dashboardService: DashboardEmpresaService,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.carregarDashboard();
@@ -140,5 +142,9 @@ export class DashboardEmpresaComponent implements OnInit, OnDestroy {
       proxima_vencer: 'Próxima do Vencimento',
     };
     return map[status] || status;
+  }
+
+  navegarParaCriarVaga(): void {
+    this.router.navigate(['/empresa/criar-vagas']);
   }
 }
