@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormsModule,
@@ -12,9 +12,12 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { InputMaskModule } from 'primeng/inputmask';
+import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
 import { EmpresaService } from '../../services/empresa.service';
+import { SegmentoService, Segmento } from '../../../../core/services/segmento.service';
+import { ConviteService } from '../../../../core/services/convite.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { finalize } from 'rxjs';
 
@@ -22,16 +25,9 @@ import { finalize } from 'rxjs';
   selector: 'app-registro-empresa',
   standalone: true,
   imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterLink,
-    ButtonModule,
-    InputTextModule,
-    PasswordModule,
-    InputMaskModule,
-    CardModule,
-    DividerModule,
+    CommonModule, FormsModule, ReactiveFormsModule, RouterLink,
+    ButtonModule, InputTextModule, PasswordModule, InputMaskModule,
+    DropdownModule, CardModule, DividerModule,
   ],
   templateUrl: './registro-empresa.component.html',
   styleUrls: ['./registro-empresa.component.scss'],
@@ -39,39 +35,45 @@ import { finalize } from 'rxjs';
 export class RegistroEmpresaComponent implements OnInit {
   form!: FormGroup;
   carregando = false;
-  validandoConvite = true;
+  validandoConvite = false;
   conviteInvalido = false;
   cadastroRealizado = false;
   mensagemSucesso = '';
   tokenConvite = '';
+  ehAutoCadastro = false;
+  segmentos: Segmento[] = [];
 
-  constructor(
-    private fb: FormBuilder,
-    private empresaService: EmpresaService,
-    private notificationService: NotificationService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
+  private fb = inject(FormBuilder);
+  private empresaService = inject(EmpresaService);
+  private segmentoService = inject(SegmentoService);
+  private conviteService = inject(ConviteService);
+  private notificationService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   ngOnInit(): void {
-    // Captura token do convite da URL
     this.tokenConvite = this.route.snapshot.queryParams['token'] || '';
+    this.ehAutoCadastro = !this.tokenConvite;
 
-    if (!this.tokenConvite) {
-      this.conviteInvalido = true;
-      this.validandoConvite = false;
-      return;
-    }
-
-    this.validarTokenConvite();
+    this.carregarSegmentos();
     this.inicializarFormulario();
+
+    if (this.tokenConvite) {
+      this.validarTokenConvite();
+    }
+  }
+
+  private carregarSegmentos(): void {
+    this.segmentoService.listar().subscribe({
+      next: (segmentos) => this.segmentos = segmentos,
+      error: () => this.notificationService.error('Erro', 'Falha ao carregar segmentos.'),
+    });
   }
 
   private validarTokenConvite(): void {
-    this.empresaService.validarConvite(this.tokenConvite).subscribe({
-      next: () => {
-        this.validandoConvite = false;
-      },
+    this.validandoConvite = true;
+    this.conviteService.validar(this.tokenConvite).subscribe({
+      next: () => this.validandoConvite = false,
       error: () => {
         this.validandoConvite = false;
         this.conviteInvalido = true;
@@ -82,13 +84,11 @@ export class RegistroEmpresaComponent implements OnInit {
   private inicializarFormulario(): void {
     this.form = this.fb.group(
       {
-        // Dados do Gestor
         nomeGestor: ['', [Validators.required, Validators.minLength(3)]],
         emailGestor: ['', [Validators.required, Validators.email]],
         senha: ['', [Validators.required, Validators.minLength(6)]],
         confirmacaoSenha: ['', Validators.required],
 
-        // Dados da Empresa
         nomeEmpresa: ['', [Validators.required, Validators.minLength(2)]],
         cnpj: ['', [Validators.required, Validators.minLength(14)]],
         telefoneEmpresa: ['', Validators.required],
@@ -107,27 +107,26 @@ export class RegistroEmpresaComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid) {
-      Object.keys(this.form.controls).forEach((key) => {
-        this.form.get(key)?.markAsTouched();
-      });
-
+      Object.keys(this.form.controls).forEach((key) => this.form.get(key)?.markAsTouched());
       if (this.form.hasError('mismatch')) {
         this.notificationService.warn('Atenção', 'As senhas não conferem.');
         return;
       }
-
       this.notificationService.warn('Atenção', 'Preencha todos os campos obrigatórios.');
       return;
     }
 
     this.carregando = true;
 
-    const request = {
-      tokenConvite: this.tokenConvite,
+    const request: Record<string, unknown> = {
       ...this.form.value,
-      cnpj: this.form.value.cnpj.replace(/\D/g, ''), // Remove máscara
+      cnpj: this.form.value.cnpj.replace(/\D/g, ''),
       telefoneEmpresa: this.form.value.telefoneEmpresa.replace(/\D/g, ''),
     };
+
+    if (this.tokenConvite) {
+      request.tokenConvite = this.tokenConvite;
+    }
 
     this.empresaService
       .criarEmpresa(request)
@@ -136,16 +135,10 @@ export class RegistroEmpresaComponent implements OnInit {
         next: (response) => {
           this.cadastroRealizado = true;
           this.mensagemSucesso = response.mensagem;
-          this.notificationService.success(
-            'Empresa Cadastrada!',
-            'Sua empresa foi registrada com sucesso.',
-          );
+          this.notificationService.success('Empresa Cadastrada!', 'Sua empresa foi registrada com sucesso.');
         },
         error: (error) => {
-          this.notificationService.error(
-            'Erro no Cadastro',
-            error.message || 'Erro ao cadastrar empresa.',
-          );
+          this.notificationService.error('Erro no Cadastro', error.message || 'Erro ao cadastrar empresa.');
         },
       });
   }

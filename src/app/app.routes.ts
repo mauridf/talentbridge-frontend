@@ -14,6 +14,33 @@ export const routes: Routes = [
     loadChildren: () => import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
 
+  // Rotas públicas de convite
+  {
+    path: 'convite/validar',
+    loadComponent: () =>
+      import('./features/auth/pages/validar-convite/validar-convite.component').then(
+        (m) => m.ValidarConviteComponent,
+      ),
+  },
+
+  // Rotas públicas de empresa (cadastro sem convite)
+  {
+    path: 'empresa/cadastro',
+    loadComponent: () =>
+      import('./features/empresa/pages/registro/registro-empresa.component').then(
+        (m) => m.RegistroEmpresaComponent,
+      ),
+  },
+
+  // Rotas públicas de recrutador (cadastro via convite)
+  {
+    path: 'recrutador/registro',
+    loadComponent: () =>
+      import('./features/auth/pages/registro-recrutador/registro-recrutador.component').then(
+        (m) => m.RegistroRecrutadorComponent,
+      ),
+  },
+
   // Rotas públicas do candidato (sem layout, sem autenticação)
   {
     path: 'candidatos/registro',

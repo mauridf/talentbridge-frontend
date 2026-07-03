@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { ResultadoDto } from '../../../core/models/resultado.dto';
 
 export interface CriarEmpresaRequest {
-  tokenConvite: string;
+  tokenConvite?: string;
   nomeGestor: string;
   emailGestor: string;
   senha: string;
