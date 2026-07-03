@@ -7,7 +7,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
@@ -31,6 +31,7 @@ import { Subject, takeUntil, finalize } from 'rxjs';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    RouterLink,
     ButtonModule,
     InputTextModule,
     PasswordModule,
