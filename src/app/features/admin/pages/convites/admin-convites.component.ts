@@ -124,7 +124,6 @@ export class AdminConvitesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const claims = JSON.parse(sessionStorage.getItem('access_token') || '{}');
     this.carregar();
   }
 
