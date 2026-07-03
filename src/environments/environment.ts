@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5001',
+  apiUrl: 'http://localhost:5000',
   apiTimeout: 30000, // 30 segundos
   jwtRefreshInterval: 30, // minutos (renovar 30min antes de expirar)
   enableSSR: false,
