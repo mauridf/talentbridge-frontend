@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" fill="none">
+  <!-- Bridge icon -->
+  <g transform="translate(8, 12)">
+    <!-- Pillars -->
+    <rect x="8" y="20" width="4" height="20" rx="1" fill="white"/>
+    <rect x="28" y="20" width="4" height="20" rx="1" fill="white"/>
+    <rect x="48" y="20" width="4" height="20" rx="1" fill="white"/>
+    <!-- Deck -->
+    <path d="M2 20 L58 20" stroke="white" stroke-width="3" stroke-linecap="round"/>
+    <!-- Arch -->
+    <path d="M6 20 Q30 2 54 20" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Cables -->
+    <line x1="8" y1="20" x2="16" y2="8" stroke="white" stroke-width="1.5" opacity="0.7"/>
+    <line x1="8" y1="20" x2="22" y2="6" stroke="white" stroke-width="1.5" opacity="0.7"/>
+    <line x1="48" y1="20" x2="38" y2="8" stroke="white" stroke-width="1.5" opacity="0.7"/>
+    <line x1="48" y1="20" x2="44" y2="6" stroke="white" stroke-width="1.5" opacity="0.7"/>
+    <!-- Stars -->
+    <circle cx="14" cy="4" r="1.2" fill="white" opacity="0.8"/>
+    <circle cx="46" cy="4" r="1.2" fill="white" opacity="0.8"/>
+    <circle cx="30" cy="1" r="1" fill="white" opacity="0.6"/>
+  </g>
+  <!-- Text -->
+  <text x="78" y="42" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="700" fill="white" letter-spacing="1">Talent</text>
+  <text x="78" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="24" font-weight="300" fill="white" letter-spacing="2">Bridge</text>
+</svg>
