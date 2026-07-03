@@ -17,13 +17,9 @@ export interface DashboardAdminResponse {
 }
 
 export interface MonitorResponse {
-  status: string;
-  uptime: string;
-  memoria: string;
-  cpu: string;
-  bancoDados: string;
-  storage: string;
-  ultimasMigracoes: string[];
+  apiStatus: string;
+  dbStatus: string;
+  externalApis?: Record<string, string>;
 }
 
 export interface GeocodeStatusResponse {
