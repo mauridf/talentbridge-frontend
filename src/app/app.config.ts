@@ -1,12 +1,11 @@
-import { ApplicationConfig, provideZoneChangeDetection, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 
 // PrimeNG
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { MessageService, ConfirmationService } from 'primeng/api';
 
 // Interceptors
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -27,11 +26,11 @@ export const appConfig: ApplicationConfig = {
     // Animações (necessário para PrimeNG)
     provideAnimations(),
 
-    // PrimeNG MessageService (toasts)
+    // PrimeNG Services
     MessageService,
+    ConfirmationService, // ← ADICIONAR ESTA LINHA
 
     // Interceptors (ordem importa!)
-    // Loading deve ser o primeiro para capturar todas as requisições
     { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
