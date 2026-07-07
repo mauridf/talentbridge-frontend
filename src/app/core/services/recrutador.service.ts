@@ -26,6 +26,13 @@ export interface CriarRecrutadorResponse {
   mensagem: string;
 }
 
+export interface RecrutadorListaItem {
+  id: string;
+  nome: string;
+  email: string;
+  status: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class RecrutadorService {
   private readonly apiUrl = `${environment.apiUrl}/Recrutador`;
@@ -47,6 +54,17 @@ export class RecrutadorService {
       map((response) => {
         if (!response.sucesso || !response.valor) {
           throw new Error(response.erros?.[0]?.mensagem || 'Erro ao adicionar recrutador');
+        }
+        return response.valor;
+      }),
+    );
+  }
+
+  listarPorEmpresa(): Observable<RecrutadorListaItem[]> {
+    return this.http.get<ResultadoDto<RecrutadorListaItem[]>>(this.apiUrl).pipe(
+      map((response) => {
+        if (!response.sucesso || !response.valor) {
+          throw new Error(response.erros?.[0]?.mensagem || 'Erro ao listar recrutadores');
         }
         return response.valor;
       }),

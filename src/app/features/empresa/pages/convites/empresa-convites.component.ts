@@ -180,8 +180,13 @@ export class EmpresaConvitesComponent implements OnInit {
   }
 
   private carregarRecrutadores(): void {
-    this.carregando = false;
-    this.recrutadores = [];
+    this.carregando = true;
+    this.recrutadorService.listarPorEmpresa()
+      .pipe(finalize(() => this.carregando = false))
+      .subscribe({
+        next: (dados) => this.recrutadores = dados,
+        error: () => this.notificationService.error('Erro', 'Falha ao carregar recrutadores.'),
+      });
   }
 
   private carregarConvites(): void {
