@@ -12,7 +12,6 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { CheckboxModule } from 'primeng/checkbox';
-import { CardModule } from 'primeng/card';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { TokenService } from '../../../../core/services/token.service';
@@ -36,7 +35,6 @@ import { Subject, takeUntil, finalize } from 'rxjs';
     InputTextModule,
     PasswordModule,
     CheckboxModule,
-    CardModule,
     PerfilSelectorModalComponent,
   ],
   templateUrl: './login.component.html',
@@ -49,6 +47,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   perfisDisponiveis: PerfilDisponivelDto[] = [];
   tokenTemporario = '';
   lembrarEmail = false;
+  showSenha = false;
 
   private destroy$ = new Subject<void>();
 

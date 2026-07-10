@@ -10,11 +10,8 @@ import {
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
-import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
 import { EmpresaService, CriarEmpresaRequest } from '../../services/empresa.service';
 import { SegmentoService, Segmento } from '../../../../core/services/segmento.service';
 import { ConviteService } from '../../../../core/services/convite.service';
@@ -26,8 +23,8 @@ import { finalize } from 'rxjs';
   standalone: true,
   imports: [
     CommonModule, FormsModule, ReactiveFormsModule, RouterLink,
-    ButtonModule, InputTextModule, PasswordModule, InputMaskModule,
-    DropdownModule, CardModule, DividerModule,
+    ButtonModule, InputTextModule, InputMaskModule,
+    DropdownModule,
   ],
   templateUrl: './registro-empresa.component.html',
   styleUrls: ['./registro-empresa.component.scss'],
@@ -42,6 +39,8 @@ export class RegistroEmpresaComponent implements OnInit {
   tokenConvite = '';
   ehAutoCadastro = false;
   segmentos: Segmento[] = [];
+  showSenha = false;
+  showConfirmSenha = false;
 
   private fb = inject(FormBuilder);
   private empresaService = inject(EmpresaService);

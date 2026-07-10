@@ -10,11 +10,8 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { CalendarModule } from 'primeng/calendar';
 import { InputMaskModule } from 'primeng/inputmask';
-import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
 import { CandidatoService, CriarCandidatoRequest } from '../../services/candidato.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { finalize } from 'rxjs';
@@ -29,11 +26,8 @@ import { finalize } from 'rxjs';
     RouterLink,
     ButtonModule,
     InputTextModule,
-    PasswordModule,
     CalendarModule,
     InputMaskModule,
-    CardModule,
-    DividerModule,
   ],
   templateUrl: './registro-candidato.component.html',
   styleUrls: ['./registro-candidato.component.scss'],
@@ -43,6 +37,8 @@ export class RegistroCandidatoComponent {
   carregando = false;
   cadastroRealizado = false;
   emailCadastrado = '';
+  showSenha = false;
+  showConfirmSenha = false;
 
   // Configuração de data: mínimo 14 anos, máximo 100 anos
   dataMaxima = new Date();

@@ -1,130 +1,152 @@
 <div class="login-page">
-  <div class="login-container">
-    <!-- Lado esquerdo: Informações / Branding -->
-    <div class="login-branding">
-      <div class="login-branding-content">
-        <img src="assets/images/logo-white.svg" alt="TalentBridge" class="login-logo" />
-        <h1 class="login-branding-title">TalentBridge</h1>
-        <p class="login-branding-subtitle">Conectando talentos às melhores oportunidades</p>
-
-        <div class="login-features">
-          <div class="feature-item">
-            <i class="pi pi-check-circle"></i>
-            <span>Match inteligente entre candidatos e vagas</span>
-          </div>
-          <div class="feature-item">
-            <i class="pi pi-check-circle"></i>
-            <span>Análise comportamental com Big Five</span>
-          </div>
-          <div class="feature-item">
-            <i class="pi pi-check-circle"></i>
-            <span>Gestão completa do processo seletivo</span>
-          </div>
-        </div>
+  <main class="login-main">
+    <!-- Left Side: Feature Branding -->
+    <section class="login-branding">
+      <div class="branding-bg-decoration">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
       </div>
-    </div>
+      <div class="branding-content">
+        <div class="branding-header">
+          <div class="branding-logo">
+            <span class="material-symbols-outlined brand-icon">corporate_fare</span>
+            <h1 class="brand-title">TalentBridge</h1>
+          </div>
+          <p class="brand-subtitle">Conectando talentos às melhores oportunidades do mercado corporativo.</p>
+        </div>
+        <nav class="branding-features">
+          <div class="feature-item">
+            <div class="feature-icon-wrap">
+              <span class="material-symbols-outlined">hub</span>
+            </div>
+            <div>
+              <h3 class="feature-title">Match inteligente</h3>
+              <p class="feature-desc">Algoritmos proprietários cruzando candidatos e vagas de elite.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrap">
+              <span class="material-symbols-outlined">psychology</span>
+            </div>
+            <div>
+              <h3 class="feature-title">Análise comportamental</h3>
+              <p class="feature-desc">Metodologia Big Five para garantir o fit cultural perfeito.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon-wrap">
+              <span class="material-symbols-outlined">assignment_turned_in</span>
+            </div>
+            <div>
+              <h3 class="feature-title">Gestão completa</h3>
+              <p class="feature-desc">Acompanhamento end-to-end do processo seletivo em tempo real.</p>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </section>
 
-    <!-- Lado direito: Formulário -->
-    <div class="login-form-container">
-      <div class="login-form-wrapper">
-        <h2 class="login-form-title">Entrar</h2>
-        <p class="login-form-subtitle">Acesse sua conta para continuar</p>
+    <!-- Right Side: Login Form -->
+    <section class="login-form-section">
+      <div class="login-form-wrap">
+        <div class="form-header">
+          <h2 class="form-title">Entrar</h2>
+          <p class="form-subtitle">Acesse sua conta para continuar sua jornada.</p>
+        </div>
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
-          <!-- Email -->
-          <div class="form-field">
-            <label for="email" class="form-label">Email</label>
-            <input
-              id="email"
-              type="email"
-              pInputText
-              formControlName="email"
-              placeholder="seu@email.com"
-              class="w-full"
-              [class.ng-invalid]="
-                loginForm.get('email')?.invalid && loginForm.get('email')?.touched
-              "
-            />
-            <small
-              *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-              class="form-error"
-            >
-              <span *ngIf="loginForm.get('email')?.errors?.['required']">Email é obrigatório.</span>
-              <span *ngIf="loginForm.get('email')?.errors?.['email']">Email inválido.</span>
-            </small>
+          <div class="input-group">
+            <label class="input-label" for="email">Email</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">mail</span>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                placeholder="fulano@gmail.com"
+                class="form-input"
+              />
+            </div>
+            @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+              <small class="form-error">
+                @if (loginForm.get('email')?.errors?.['required']) { Email é obrigatório. }
+                @if (loginForm.get('email')?.errors?.['email']) { Email inválido. }
+              </small>
+            }
           </div>
 
-          <!-- Senha -->
-          <div class="form-field">
-            <label for="senha" class="form-label">Senha</label>
-            <p-password
-              id="senha"
-              formControlName="senha"
-              [toggleMask]="true"
-              [feedback]="false"
-              placeholder="Sua senha"
-              styleClass="w-full"
-              inputStyleClass="w-full"
-            >
-            </p-password>
-            <small
-              *ngIf="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched"
-              class="form-error"
-            >
-              <span *ngIf="loginForm.get('senha')?.errors?.['required']">Senha é obrigatória.</span>
-              <span *ngIf="loginForm.get('senha')?.errors?.['minlength']"
-                >Mínimo 6 caracteres.</span
-              >
-            </small>
+          <div class="input-group">
+            <div class="input-label-row">
+              <label class="input-label" for="senha">Senha</label>
+              <a routerLink="/forgot-password" class="forgot-link">Esqueceu a senha?</a>
+            </div>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">lock</span>
+              <input
+                id="senha"
+                [type]="showSenha ? 'text' : 'password'"
+                formControlName="senha"
+                placeholder="Sua senha"
+                class="form-input"
+              />
+              <button type="button" class="toggle-password" (click)="showSenha = !showSenha">
+                <span class="material-symbols-outlined">{{ showSenha ? 'visibility_off' : 'visibility' }}</span>
+              </button>
+            </div>
+            @if (loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched) {
+              <small class="form-error">
+                @if (loginForm.get('senha')?.errors?.['required']) { Senha é obrigatória. }
+                @if (loginForm.get('senha')?.errors?.['minlength']) { Mínimo 6 caracteres. }
+              </small>
+            }
           </div>
 
-          <!-- Lembrar email + Esqueci senha -->
           <div class="form-options">
-            <p-checkbox formControlName="lembrar" label="Lembrar email" [binary]="true">
-            </p-checkbox>
-
-            <a routerLink="/forgot-password" class="forgot-password"> Esqueceu a senha? </a>
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="lembrar" class="form-checkbox" />
+              <span class="checkbox-text">Lembrar email</span>
+            </label>
           </div>
 
-          <!-- Botão Login -->
-          <p-button
-            type="submit"
-            label="Entrar"
-            icon="pi pi-sign-in"
-            [loading]="carregando"
-            styleClass="w-full login-button"
-          >
-          </p-button>
-
-          <!-- Links de cadastro -->
-          <div class="login-register-links">
-            <p>Ainda não tem conta?</p>
-            <div class="register-buttons">
-              <a routerLink="/candidatos/registro" class="register-link">
-                <i class="pi pi-user-plus"></i>
-                Cadastrar como Candidato
-              </a>
-              <a routerLink="/empresa/cadastro" class="register-link register-link-secondary">
-                <i class="pi pi-building"></i>
-                Cadastrar Empresa
-              </a>
-            </div>
-            <div class="register-invite">
-              <i class="pi pi-envelope"></i>
-              <a routerLink="/convite/validar">Recebeu um convite? Cadastre-se aqui</a>
-            </div>
-          </div>
+          <button type="submit" class="btn-primary" [disabled]="carregando">
+            @if (carregando) {
+              <span class="material-symbols-outlined spin">sync</span>
+            } @else {
+              <span class="material-symbols-outlined">login</span>
+            }
+            Entrar
+          </button>
         </form>
-      </div>
-    </div>
-  </div>
 
-  <!-- Modal de Seleção de Perfil (multi-perfil) -->
+        <div class="divider">
+          <span class="divider-line"></span>
+          <span class="divider-text">Ainda não tem conta?</span>
+          <span class="divider-line"></span>
+        </div>
+
+        <div class="register-buttons">
+          <a routerLink="/candidatos/registro" class="btn-outline">
+            <span class="material-symbols-outlined btn-icon">person_add</span>
+            Cadastrar como Candidato
+          </a>
+          <a routerLink="/empresa/cadastro" class="btn-outline btn-outline-primary">
+            <span class="material-symbols-outlined btn-icon">business</span>
+            Cadastrar Empresa
+          </a>
+        </div>
+
+        <div class="invite-link">
+          <span class="material-symbols-outlined">mail</span>
+          <a routerLink="/convite/validar">Recebeu um convite? <strong>Cadastre-se aqui</strong></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
   <app-perfil-selector-modal
     [visivel]="mostrarModalPerfil"
     [perfis]="perfisDisponiveis"
     [carregando]="carregando"
     (confirmar)="onConfirmarPerfil($event)"
-  >
-  </app-perfil-selector-modal>
+  />
 </div>

@@ -1,53 +1,96 @@
-// ============================================
-// TalentBridge - Estilos Globais
-// ============================================
-
-// Importar tema PrimeNG
 @import 'primeflex/primeflex.scss';
 
-// Variáveis globais do TalentBridge
-:root {
-  // Cores principais
-  --primary-color: #3B82F6;
-  --primary-dark: #2563EB;
-  --primary-light: #93C5FD;
-  
-  // Cores secundárias
-  --secondary-color: #10B981;
-  --secondary-dark: #059669;
-  
-  // Cores de estado
-  --success-color: #22C55E;
-  --warning-color: #F59E0B;
-  --danger-color: #EF4444;
-  --info-color: #3B82F6;
-  
-  // Neutras
-  --surface-ground: #F8FAFC;
-  --surface-section: #FFFFFF;
-  --surface-card: #FFFFFF;
-  --surface-overlay: #FFFFFF;
-  --surface-border: #E2E8F0;
-  --surface-hover: #F1F5F9;
-  
-  // Texto
-  --text-color: #1E293B;
-  --text-color-secondary: #64748B;
-  
-  // Espaçamento
-  --content-padding: 1.25rem;
-  --inline-spacing: 0.5rem;
-  
-  // Bordas
-  --border-radius: 6px;
-  
-  // Sombras
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  display: inline-block;
+  vertical-align: middle;
 }
 
-// Reset e configurações base
+:root {
+  --primary: #003ec7;
+  --primary-container: #0052ff;
+  --on-primary: #ffffff;
+  --on-primary-container: #dfe3ff;
+  --primary-fixed: #dde1ff;
+  --primary-fixed-dim: #b7c4ff;
+  --on-primary-fixed: #001452;
+  --on-primary-fixed-variant: #0038b6;
+
+  --secondary: #505f76;
+  --secondary-container: #d0e1fb;
+  --on-secondary: #ffffff;
+  --on-secondary-container: #54647a;
+  --secondary-fixed: #d3e4fe;
+  --secondary-fixed-dim: #b7c8e1;
+  --on-secondary-fixed: #0b1c30;
+  --on-secondary-fixed-variant: #38485d;
+
+  --tertiary: #464e64;
+  --tertiary-container: #5e667d;
+  --on-tertiary: #ffffff;
+  --on-tertiary-container: #dde4ff;
+  --tertiary-fixed: #dae2fd;
+  --tertiary-fixed-dim: #bec6e0;
+  --on-tertiary-fixed: #131b2e;
+  --on-tertiary-fixed-variant: #3f465c;
+
+  --surface: #f7f9fb;
+  --surface-dim: #d8dadc;
+  --surface-bright: #f7f9fb;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f2f4f6;
+  --surface-container: #eceef0;
+  --surface-container-high: #e6e8ea;
+  --surface-container-highest: #e0e3e5;
+  --surface-variant: #e0e3e5;
+  --on-surface: #191c1e;
+  --on-surface-variant: #434656;
+  --inverse-surface: #2d3133;
+  --inverse-on-surface: #eff1f3;
+  --inverse-primary: #b7c4ff;
+
+  --background: #f7f9fb;
+  --on-background: #191c1e;
+
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+
+  --outline: #737688;
+  --outline-variant: #c3c5d9;
+
+  --surface-ground: #f7f9fb;
+  --surface-section: #ffffff;
+  --surface-card: #ffffff;
+  --surface-overlay: #ffffff;
+  --surface-border: #c3c5d9;
+  --surface-hover: #f2f4f6;
+
+  --text-color: #191c1e;
+  --text-color-secondary: #434656;
+
+  --primary-color: #003ec7;
+  --primary-dark: #0038b6;
+  --primary-light: #b7c4ff;
+
+  --secondary-color: #505f76;
+  --secondary-dark: #38485d;
+
+  --success-color: #22C55E;
+  --warning-color: #F59E0B;
+  --danger-color: #ba1a1a;
+  --info-color: #003ec7;
+
+  --content-padding: 1.25rem;
+  --inline-spacing: 0.5rem;
+  --border-radius: 6px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -56,7 +99,7 @@
 
 html, body {
   height: 100%;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
   color: var(--text-color);
   background-color: var(--surface-ground);
@@ -64,7 +107,6 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Tipografia
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-color);
   font-weight: 600;
@@ -76,17 +118,12 @@ h1 { font-size: 2rem; }
 h2 { font-size: 1.5rem; }
 h3 { font-size: 1.25rem; }
 
-// Links
 a {
   color: var(--primary-color);
   text-decoration: none;
-  
-  &:hover {
-    text-decoration: underline;
-  }
+  &:hover { text-decoration: underline; }
 }
 
-// Utilitários de layout
 .page-container {
   padding: 1.5rem;
   max-width: 1400px;
@@ -101,7 +138,6 @@ a {
   margin-bottom: 1rem;
 }
 
-// Animações
 .fade-in {
   animation: fadeIn 0.3s ease-in;
 }
@@ -111,12 +147,12 @@ a {
   to { opacity: 1; transform: translateY(0); }
 }
 
-// Responsividade
+.premium-shadow {
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05), 0px 4px 12px rgba(0, 0, 0, 0.03);
+}
+
 @media (max-width: 768px) {
-  .page-container {
-    padding: 1rem;
-  }
-  
+  .page-container { padding: 1rem; }
   h1 { font-size: 1.5rem; }
   h2 { font-size: 1.25rem; }
 }

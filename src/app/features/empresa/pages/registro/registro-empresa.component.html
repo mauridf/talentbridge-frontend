@@ -1,146 +1,182 @@
 <div class="registro-page">
-  <div class="registro-container">
-    <p-card styleClass="registro-card">
-      <div class="registro-header">
-        @if (ehAutoCadastro) {
+  <nav class="top-navbar">
+    <div class="navbar-inner">
+      <div class="brand">TalentBridge</div>
+      <div class="nav-links">
+        <a href="#">Vagas</a>
+        <a href="#">Empresas</a>
+        <div class="nav-actions">
+          <a routerLink="/login" class="nav-login">Login</a>
+          <a routerLink="/candidatos/registro" class="nav-register">Register</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main class="registro-main">
+    <div class="registro-container">
+      <div class="registro-card">
+        <div class="card-header">
           <h1>Cadastrar Empresa</h1>
           <p>Crie sua conta empresarial e comece a publicar vagas</p>
-        } @else {
-          <h1>Cadastro via Convite</h1>
-          <p>Preencha os dados para ativar sua conta empresarial</p>
+        </div>
+
+        <!-- Validating -->
+        @if (validandoConvite) {
+          <div class="registro-status">
+            <span class="material-symbols-outlined spin status-spinner">sync</span>
+            <p>Validando convite...</p>
+          </div>
         }
-      </div>
 
-      <p-divider></p-divider>
-
-      <!-- Validando Convite -->
-      @if (validandoConvite) {
-        <div class="registro-status">
-          <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: var(--primary-color)"></i>
-          <p>Validando convite...</p>
-        </div>
-      }
-
-      <!-- Convite Inválido -->
-      @if (conviteInvalido && !validandoConvite) {
-        <div class="registro-status error">
-          <i class="pi pi-exclamation-triangle"></i>
-          <h2>Convite Inválido</h2>
-          <p>O link de convite é inválido ou expirou. Solicite um novo convite ao administrador.</p>
-          <p-button label="Voltar ao Login" icon="pi pi-arrow-left" routerLink="/login"></p-button>
-        </div>
-      }
-
-      <!-- Sucesso -->
-      @if (cadastroRealizado) {
-        <div class="registro-status success">
-          <i class="pi pi-check-circle"></i>
-          <h2>Cadastro Realizado!</h2>
-          <p>{{ mensagemSucesso }}</p>
-          <p-button label="Ir para o Login" icon="pi pi-sign-in" routerLink="/login"></p-button>
-        </div>
-      }
-
-      <!-- Formulário -->
-      @if (!validandoConvite && !conviteInvalido && !cadastroRealizado) {
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="registro-form">
-          <!-- Dados do Gestor -->
-          <div class="form-section">
-            <h3><i class="pi pi-user"></i> Dados do Responsável</h3>
-
-            <div class="form-grid">
-              <div class="form-field full-width">
-                <label for="nomeGestor">Nome Completo *</label>
-                <input id="nomeGestor" type="text" pInputText formControlName="nomeGestor" placeholder="Nome do responsável" />
-                @if (form.get('nomeGestor')?.invalid && form.get('nomeGestor')?.touched) {
-                  <small class="form-error">Nome completo é obrigatório.</small>
-                }
-              </div>
-
-              <div class="form-field">
-                <label for="emailGestor">Email *</label>
-                <input id="emailGestor" type="email" pInputText formControlName="emailGestor" placeholder="email@empresa.com" />
-                @if (form.get('emailGestor')?.invalid && form.get('emailGestor')?.touched) {
-                  <small class="form-error">Email válido é obrigatório.</small>
-                }
-              </div>
-
-              <div class="form-field">
-                <label for="telefoneEmpresa">Telefone *</label>
-                <p-inputMask id="telefoneEmpresa" formControlName="telefoneEmpresa" mask="(99) 99999-9999" placeholder="(11) 99999-9999"></p-inputMask>
-                @if (form.get('telefoneEmpresa')?.invalid && form.get('telefoneEmpresa')?.touched) {
-                  <small class="form-error">Telefone é obrigatório.</small>
-                }
-              </div>
-
-              <div class="form-field">
-                <label for="senha">Senha *</label>
-                <p-password id="senha" formControlName="senha" [toggleMask]="true" placeholder="Mínimo 6 caracteres" styleClass="w-full" inputStyleClass="w-full"></p-password>
-              </div>
-
-              <div class="form-field">
-                <label for="confirmacaoSenha">Confirmar Senha *</label>
-                <p-password id="confirmacaoSenha" formControlName="confirmacaoSenha" [toggleMask]="true" [feedback]="false" placeholder="Repita a senha" styleClass="w-full" inputStyleClass="w-full"></p-password>
-                @if (form.hasError('mismatch') && form.get('confirmacaoSenha')?.touched) {
-                  <small class="form-error">As senhas não conferem.</small>
-                }
-              </div>
-            </div>
-          </div>
-
-          <!-- Dados da Empresa -->
-          <div class="form-section">
-            <h3><i class="pi pi-building"></i> Dados da Empresa</h3>
-
-            <div class="form-grid">
-              <div class="form-field full-width">
-                <label for="nomeEmpresa">Nome da Empresa *</label>
-                <input id="nomeEmpresa" type="text" pInputText formControlName="nomeEmpresa" placeholder="Razão social ou nome fantasia" />
-                @if (form.get('nomeEmpresa')?.invalid && form.get('nomeEmpresa')?.touched) {
-                  <small class="form-error">Nome da empresa é obrigatório.</small>
-                }
-              </div>
-
-              <div class="form-field">
-                <label for="cnpj">CNPJ *</label>
-                <p-inputMask id="cnpj" formControlName="cnpj" mask="99.999.999/9999-99" placeholder="00.000.000/0000-00"></p-inputMask>
-                @if (form.get('cnpj')?.invalid && form.get('cnpj')?.touched) {
-                  <small class="form-error">CNPJ é obrigatório.</small>
-                }
-              </div>
-
-              <div class="form-field">
-                <label for="segmentoId">Segmento *</label>
-                <p-dropdown
-                  id="segmentoId"
-                  formControlName="segmentoId"
-                  [options]="segmentos"
-                  optionLabel="nome"
-                  optionValue="id"
-                  placeholder="Selecione o segmento"
-                  styleClass="w-full"
-                ></p-dropdown>
-                @if (form.get('segmentoId')?.invalid && form.get('segmentoId')?.touched) {
-                  <small class="form-error">Segmento é obrigatório.</small>
-                }
-              </div>
-            </div>
-          </div>
-
-          <!-- Botões -->
-          <div class="form-actions">
-            <p-button type="submit" label="Cadastrar Empresa" icon="pi pi-building" [loading]="carregando" styleClass="w-full"></p-button>
-          </div>
-
-          <div class="form-footer">
-            <p>Já tem uma conta?</p>
-            <a routerLink="/login">
-              <i class="pi pi-sign-in"></i>
-              Fazer Login
+        <!-- Invalid invite -->
+        @if (conviteInvalido && !validandoConvite) {
+          <div class="registro-status error-status">
+            <span class="material-symbols-outlined status-icon">warning</span>
+            <h2>Convite Inválido</h2>
+            <p>O link de convite é inválido ou expirou. Solicite um novo convite ao administrador.</p>
+            <a routerLink="/login" class="btn-primary">
+              <span class="material-symbols-outlined">arrow_back</span>
+              Voltar ao Login
             </a>
           </div>
-        </form>
-      }
-    </p-card>
-  </div>
+        }
+
+        <!-- Success -->
+        @if (cadastroRealizado) {
+          <div class="registro-status success-status">
+            <span class="material-symbols-outlined status-icon success-icon">check_circle</span>
+            <h2>Cadastro Realizado!</h2>
+            <p>{{ mensagemSucesso }}</p>
+            <a routerLink="/login" class="btn-primary">
+              <span class="material-symbols-outlined">login</span>
+              Ir para o Login
+            </a>
+          </div>
+        }
+
+        <!-- Form -->
+        @if (!validandoConvite && !conviteInvalido && !cadastroRealizado) {
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" class="registro-form">
+            <div class="form-section">
+              <div class="section-header">
+                <span class="material-symbols-outlined section-icon">person</span>
+                <h2>Dados do Responsável</h2>
+              </div>
+              <div class="form-grid">
+                <div class="form-field full-width">
+                  <label for="nomeGestor">Nome Completo *</label>
+                  <input id="nomeGestor" type="text" formControlName="nomeGestor" placeholder="Nome do responsável" class="form-input" />
+                  @if (form.get('nomeGestor')?.invalid && form.get('nomeGestor')?.touched) {
+                    <small class="form-error">Nome completo é obrigatório.</small>
+                  }
+                </div>
+                <div class="form-field">
+                  <label for="emailGestor">Email *</label>
+                  <input id="emailGestor" type="email" formControlName="emailGestor" placeholder="email@empresa.com" class="form-input" />
+                  @if (form.get('emailGestor')?.invalid && form.get('emailGestor')?.touched) {
+                    <small class="form-error">Email válido é obrigatório.</small>
+                  }
+                </div>
+                <div class="form-field">
+                  <label for="telefoneEmpresa">Telefone *</label>
+                  <p-inputMask id="telefoneEmpresa" formControlName="telefoneEmpresa" mask="(99) 99999-9999" placeholder="(11) 99999-9999" styleClass="w-full" inputStyleClass="form-input" />
+                  @if (form.get('telefoneEmpresa')?.invalid && form.get('telefoneEmpresa')?.touched) {
+                    <small class="form-error">Telefone é obrigatório.</small>
+                  }
+                </div>
+                <div class="form-field">
+                  <label for="senha">Senha *</label>
+                  <div class="input-wrapper">
+                    <input id="senha" [type]="showSenha ? 'text' : 'password'" formControlName="senha" placeholder="Mínimo 6 caracteres" class="form-input" />
+                    <button type="button" class="toggle-password" (click)="showSenha = !showSenha">
+                      <span class="material-symbols-outlined">{{ showSenha ? 'visibility_off' : 'visibility' }}</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <label for="confirmacaoSenha">Confirmar Senha *</label>
+                  <div class="input-wrapper">
+                    <input id="confirmacaoSenha" [type]="showConfirmSenha ? 'text' : 'password'" formControlName="confirmacaoSenha" placeholder="Repita a senha" class="form-input" />
+                    <button type="button" class="toggle-password" (click)="showConfirmSenha = !showConfirmSenha">
+                      <span class="material-symbols-outlined">{{ showConfirmSenha ? 'visibility_off' : 'visibility' }}</span>
+                    </button>
+                  </div>
+                  @if (form.hasError('mismatch') && form.get('confirmacaoSenha')?.touched) {
+                    <small class="form-error">As senhas não conferem.</small>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="section-divider"></div>
+
+            <div class="form-section">
+              <div class="section-header">
+                <span class="material-symbols-outlined section-icon">corporate_fare</span>
+                <h2>Dados da Empresa</h2>
+              </div>
+              <div class="form-grid">
+                <div class="form-field full-width">
+                  <label for="nomeEmpresa">Nome da Empresa *</label>
+                  <input id="nomeEmpresa" type="text" formControlName="nomeEmpresa" placeholder="Razão social ou nome fantasia" class="form-input" />
+                  @if (form.get('nomeEmpresa')?.invalid && form.get('nomeEmpresa')?.touched) {
+                    <small class="form-error">Nome da empresa é obrigatório.</small>
+                  }
+                </div>
+                <div class="form-field">
+                  <label for="cnpj">CNPJ *</label>
+                  <p-inputMask id="cnpj" formControlName="cnpj" mask="99.999.999/9999-99" placeholder="00.000.000/0000-00" styleClass="w-full" inputStyleClass="form-input" />
+                  @if (form.get('cnpj')?.invalid && form.get('cnpj')?.touched) {
+                    <small class="form-error">CNPJ é obrigatório.</small>
+                  }
+                </div>
+                <div class="form-field">
+                  <label for="segmentoId">Segmento *</label>
+                  <p-dropdown id="segmentoId" formControlName="segmentoId" [options]="segmentos" optionLabel="nome" optionValue="id" placeholder="Selecione o segmento" styleClass="w-full" inputStyleClass="form-input" />
+                  @if (form.get('segmentoId')?.invalid && form.get('segmentoId')?.touched) {
+                    <small class="form-error">Segmento é obrigatório.</small>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn-primary" [disabled]="carregando">
+                @if (carregando) {
+                  <span class="material-symbols-outlined spin">sync</span>
+                } @else {
+                  <span class="material-symbols-outlined">corporate_fare</span>
+                }
+                Cadastrar Empresa
+              </button>
+            </div>
+
+            <div class="form-footer">
+              <p>Já tem uma conta?</p>
+              <a routerLink="/login" class="footer-link">
+                <span class="material-symbols-outlined">login</span>
+                Fazer Login
+              </a>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </main>
+
+  <footer class="registro-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand">TalentBridge</div>
+        <p>&copy; 2024 TalentBridge. All rights reserved.</p>
+      </div>
+      <nav class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Help Center</a>
+        <a href="#">Contact Us</a>
+      </nav>
+    </div>
+  </footer>
 </div>
